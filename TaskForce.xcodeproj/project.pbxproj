@@ -27,6 +27,8 @@
 		9085FBC027A893D70042AEE2 /* CharactersRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBBF27A893D70042AEE2 /* CharactersRepository.swift */; };
 		9085FBC427A894510042AEE2 /* PagingParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBC327A894510042AEE2 /* PagingParameters.swift */; };
 		9085FBC627A8945D0042AEE2 /* PageableResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBC527A8945D0042AEE2 /* PageableResponse.swift */; };
+		9085FBC927A897500042AEE2 /* Credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9085FBC827A897500042AEE2 /* Credentials.plist */; };
+		9085FBCC27A897AB0042AEE2 /* CredentialsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBCB27A897AB0042AEE2 /* CredentialsStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,8 @@
 		9085FBBF27A893D70042AEE2 /* CharactersRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersRepository.swift; sourceTree = "<group>"; };
 		9085FBC327A894510042AEE2 /* PagingParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingParameters.swift; sourceTree = "<group>"; };
 		9085FBC527A8945D0042AEE2 /* PageableResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageableResponse.swift; sourceTree = "<group>"; };
+		9085FBC827A897500042AEE2 /* Credentials.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Credentials.plist; sourceTree = "<group>"; };
+		9085FBCB27A897AB0042AEE2 /* CredentialsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,10 +126,12 @@
 			children = (
 				9085FBB627A893120042AEE2 /* Common */,
 				9085FBA727A7270D0042AEE2 /* Domain */,
+				9085FBC727A8972D0042AEE2 /* Resources */,
 				9085FB6D27A6A4F90042AEE2 /* ContentView.swift */,
 				9085FB6B27A6A4F90042AEE2 /* TaskForceApp.swift */,
 				9085FB6F27A6A4FA0042AEE2 /* Assets.xcassets */,
 				9085FB7427A6A4FA0042AEE2 /* Persistence.swift */,
+				9085FBCB27A897AB0042AEE2 /* CredentialsStore.swift */,
 				9085FB7627A6A4FA0042AEE2 /* TaskForce.xcdatamodeld */,
 				9085FB7127A6A4FA0042AEE2 /* Preview Content */,
 			);
@@ -246,6 +252,14 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		9085FBC727A8972D0042AEE2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9085FBC827A897500042AEE2 /* Credentials.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -350,6 +364,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9085FBC927A897500042AEE2 /* Credentials.plist in Resources */,
 				9085FB7327A6A4FA0042AEE2 /* Preview Assets.xcassets in Resources */,
 				9085FB7027A6A4FA0042AEE2 /* Assets.xcassets in Resources */,
 			);
@@ -388,6 +403,7 @@
 				9085FBAA27A727200042AEE2 /* APIClient.swift in Sources */,
 				9085FBBB27A893620042AEE2 /* APIRequest.swift in Sources */,
 				9085FB6C27A6A4F90042AEE2 /* TaskForceApp.swift in Sources */,
+				9085FBCC27A897AB0042AEE2 /* CredentialsStore.swift in Sources */,
 				9085FBAD27A88E5D0042AEE2 /* URLRequestBuilder.swift in Sources */,
 				9085FBB227A892920042AEE2 /* LiveAPIClient.swift in Sources */,
 				9085FBC027A893D70042AEE2 /* CharactersRepository.swift in Sources */,
