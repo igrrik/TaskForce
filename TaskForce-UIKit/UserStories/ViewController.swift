@@ -19,22 +19,29 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavigationBar()
         configureCollectionView()
         applyInitialSnapshots()
+    }
+
+    func configureNavigationBar() {
+        title = "Marvel"
+
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .marvelBackground
+
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
+        navigationItem.titleView = UIImageView(image: UIImage(named: "marvel_logo"))
     }
 
     func configureCollectionView() {
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .marvelBackground
         view.addSubview(collectionView)
-
-        if #available(iOS 15, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .red
-            UINavigationBar.appearance().standardAppearance = appearance
-            UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        }
     }
 
     private func createDataSource() -> UICollectionViewDiffableDataSource<Section, Hero> {
