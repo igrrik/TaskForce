@@ -12,7 +12,5 @@ struct PageableResponse<Result> {
     let limit: UInt
     let result: Result
 
-    func nextPageParameters() -> PagingParameters {
-        return PagingParameters(limit: limit, offset: offset + limit)
-    }
+    var pagingParameters: PagingParameters { .init(limit: limit, offset: offset) }
 }

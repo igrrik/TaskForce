@@ -10,4 +10,8 @@ import Foundation
 struct PagingParameters {
     @Clamping(1...100) var limit: UInt = 20
     var offset: UInt = 0
+
+    func nextPageParameters() -> PagingParameters {
+        return PagingParameters(limit: limit, offset: offset + limit)
+    }
 }
