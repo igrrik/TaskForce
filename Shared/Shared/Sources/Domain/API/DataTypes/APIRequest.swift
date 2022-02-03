@@ -12,12 +12,17 @@ protocol APIRequest {
 
     var method: HTTPMethod { get }
     var resource: APIResource { get }
-    var path: String { get }
+    var path: String? { get }
     var queryItems: [URLQueryItem] { get }
 }
 
 extension APIRequest {
     var method: HTTPMethod { .GET }
+}
+
+protocol APIPageableRequest: APIRequest {
+    var limit: UInt { get }
+    var offset: UInt { get }
 }
 
 enum HTTPMethod: String {

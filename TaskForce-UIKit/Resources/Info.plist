@@ -19,5 +19,15 @@
 			</array>
 		</dict>
 	</dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>gateway.marvel.com</key>
+			<string></string>
+		</dict>
+	</dict>
 </dict>
 </plist>

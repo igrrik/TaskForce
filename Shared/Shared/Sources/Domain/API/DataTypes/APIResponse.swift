@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct APIResponse<Result: Decodable>: Decodable {
+struct APIResponse<ResultElement: Decodable>: Decodable {
     let code: Int
     let status: String
     let data: APIResponse.Data
 
     struct Data: Decodable {
-        let offset: Int
-        let limit: Int
-        let total: Int
-        let count: Int
-        let results: [Result]
+        let offset: UInt
+        let limit: UInt
+        let total: UInt
+        let count: UInt
+        let results: [ResultElement]
     }
 }

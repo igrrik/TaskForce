@@ -9,5 +9,5 @@ import Foundation
 import Combine
 
 protocol APIClient {
-    func execute<T: APIRequest>(request: T) -> AnyPublisher<APIResponse<T.Response>, Error>
+    func execute<T: APIRequest>(request: T) -> AnyPublisher<APIResponse<T.ResponseElement>, Error>
 }

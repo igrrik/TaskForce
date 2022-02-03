@@ -16,10 +16,9 @@ extension CredentialsStore {
     static let shared = CredentialsStore.obtainCredsFromPlist()
 
     private static func obtainCredsFromPlist() -> Self {
-        guard let path = Bundle.main.path(forResource: "Credentials", ofType: "plist") else {
+        guard let url = Bundle.module.url(forResource: "Credentials", withExtension: "plist") else {
             fatalError("Failed to obtain Credentials.plist")
         }
-        let url = URL(fileURLWithPath: path)
         do {
             let data = try Data(contentsOf: url)
             let decoder = PropertyListDecoder()

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Shared
 
 final class CharactersListViewController: UIViewController {
 
@@ -14,14 +15,25 @@ final class CharactersListViewController: UIViewController {
         case allCharacters
     }
 
+    private let viewModel: CharactersListViewModel
     private lazy var dataSource = createDataSource()
     private lazy var collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+
+    init(viewModel: CharactersListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar()
         configureCollectionView()
         applyInitialSnapshots()
+        viewModel.loadMoreCharacters()
     }
 
     func configureNavigationBar() {

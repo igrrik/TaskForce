@@ -1,14 +1,14 @@
 //
-//  RootViewModel.swift
-//  TaskForce
+//  CharactersListViewModel.swift
+//  
 //
-//  Created by Igor Kokoev on 01.02.2022.
+//  Created by Igor Kokoev on 04.02.2022.
 //
 
 import Foundation
 import Combine
 
-final class RootViewModel: ObservableObject {
+final class CharactersListViewModel: ObservableObject {
     @Published private(set) var error: Error?
     @Published private(set) var characters: [Character] = []
 
@@ -20,8 +20,12 @@ final class RootViewModel: ObservableObject {
         self.charactersRepository = charactersRepository
     }
 
-    func loadMoreData() {
-        charactersRepository.obtainCharacters(pagingParams: charactersLatestPagingParameters)
+    func loadMoreCharacters() {
+        var pagingParameters = charactersLatestPagingParameters
+        if characters.isEmpty {
+            pagingParameters = pagingParameters.nextPageParameters()
+        }
+        charactersRepository.obtainCharacters(pagingParams: pagingParameters)
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
                 guard case let .failure(error) = completion else { return }

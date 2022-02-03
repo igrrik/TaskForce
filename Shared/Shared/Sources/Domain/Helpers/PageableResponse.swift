@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PageableResponse<Result> {
+struct PageableResponse<Result: Decodable> {
     let offset: UInt
     let limit: UInt
     let result: Result
