@@ -41,6 +41,7 @@ class ViewController: UIViewController {
     func configureCollectionView() {
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .marvelBackground
+        collectionView.delegate = self
         view.addSubview(collectionView)
     }
 
@@ -193,15 +194,24 @@ class ViewController: UIViewController {
     }
 }
 
+extension ViewController: UICollectionViewDelegate {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let hero = dataSource.itemIdentifier(for: indexPath) else { fatalError() }
+        let viewController = CharacterDetailsViewController(hero: hero)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 private extension UIImage {
     static let batman = UIImage(named: "batman")!
     static let superman = UIImage(named: "superman")!
 }
 
-private struct Hero: Hashable {
+struct Hero: Hashable {
     let identifier: UUID = .init()
     let name: String
     let image: UIImage
+    let descriptionText: String = "Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction!"
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
@@ -268,7 +278,7 @@ private final class SquadCell: UICollectionViewCell {
     }
 }
 
-class TitleSupplementaryView: UICollectionReusableView {
+private final class TitleSupplementaryView: UICollectionReusableView {
     let label = UILabel()
     static let reuseIdentifier = "title-supplementary-reuse-identifier"
 
@@ -294,7 +304,7 @@ class TitleSupplementaryView: UICollectionReusableView {
     }
 }
 
-private extension UIColor {
+extension UIColor {
     static let marvelBackground: UIColor = #colorLiteral(red: 0.1774274111, green: 0.1937928796, blue: 0.2227301598, alpha: 0.9)
     static let marvelGreyLight: UIColor = #colorLiteral(red: 0.2941176471, green: 0.3176470588, blue: 0.368627451, alpha: 1)
     static let marvelGreyDark: UIColor = #colorLiteral(red: 0.2117647059, green: 0.231372549, blue: 0.2705882353, alpha: 1)

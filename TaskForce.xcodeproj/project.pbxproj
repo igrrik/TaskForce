@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */; };
 		9085FB6C27A6A4F90042AEE2 /* TaskForceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FB6B27A6A4F90042AEE2 /* TaskForceApp.swift */; };
 		9085FB6E27A6A4F90042AEE2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FB6D27A6A4F90042AEE2 /* ContentView.swift */; };
 		9085FB7027A6A4FA0042AEE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9085FB6F27A6A4FA0042AEE2 /* Assets.xcassets */; };
@@ -41,8 +42,6 @@
 		9085FBF427A9CF340042AEE2 /* TaskForce_UIKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBF327A9CF340042AEE2 /* TaskForce_UIKitTests.swift */; };
 		9085FBFE27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBFD27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift */; };
 		9085FC0027A9CF340042AEE2 /* TaskForce_UIKitUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBFF27A9CF340042AEE2 /* TaskForce_UIKitUITestsLaunchTests.swift */; };
-		9085FC0C27A9E3AD0042AEE2 /* HeroCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FC0A27A9E3AD0042AEE2 /* HeroCollectionViewCell.swift */; };
-		9085FC0D27A9E3AD0042AEE2 /* HeroCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9085FC0B27A9E3AD0042AEE2 /* HeroCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +76,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewController.swift; sourceTree = "<group>"; };
 		9085FB6827A6A4F90042AEE2 /* TaskForce.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskForce.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9085FB6B27A6A4F90042AEE2 /* TaskForceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskForceApp.swift; sourceTree = "<group>"; };
 		9085FB6D27A6A4F90042AEE2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -118,8 +118,6 @@
 		9085FBF927A9CF340042AEE2 /* TaskForce-UIKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TaskForce-UIKitUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9085FBFD27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskForce_UIKitUITests.swift; sourceTree = "<group>"; };
 		9085FBFF27A9CF340042AEE2 /* TaskForce_UIKitUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskForce_UIKitUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		9085FC0A27A9E3AD0042AEE2 /* HeroCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroCollectionViewCell.swift; sourceTree = "<group>"; };
-		9085FC0B27A9E3AD0042AEE2 /* HeroCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeroCollectionViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +166,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9056547127AACDBE00C4469D /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9085FBDC27A9CF330042AEE2 /* AppDelegate.swift */,
+				9085FBDE27A9CF330042AEE2 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		9056547227AACDC900C4469D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9085FBEA27A9CF340042AEE2 /* Info.plist */,
+				9085FBE527A9CF340042AEE2 /* Assets.xcassets */,
+				9085FBE727A9CF340042AEE2 /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		9056547327AACDDE00C4469D /* UserStories */ = {
+			isa = PBXGroup;
+			children = (
+				9056547527AB3FC400C4469D /* CharacterDetails */,
+				9056547427AB3FB100C4469D /* CharactersList */,
+			);
+			path = UserStories;
+			sourceTree = "<group>";
+		};
+		9056547427AB3FB100C4469D /* CharactersList */ = {
+			isa = PBXGroup;
+			children = (
+				9085FBE027A9CF330042AEE2 /* ViewController.swift */,
+			);
+			path = CharactersList;
+			sourceTree = "<group>";
+		};
+		9056547527AB3FC400C4469D /* CharacterDetails */ = {
+			isa = PBXGroup;
+			children = (
+				9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */,
+			);
+			path = CharacterDetails;
+			sourceTree = "<group>";
+		};
 		9085FB5F27A6A4F90042AEE2 = {
 			isa = PBXGroup;
 			children = (
@@ -348,14 +390,9 @@
 		9085FBDB27A9CF330042AEE2 /* TaskForce-UIKit */ = {
 			isa = PBXGroup;
 			children = (
-				9085FBDC27A9CF330042AEE2 /* AppDelegate.swift */,
-				9085FBDE27A9CF330042AEE2 /* SceneDelegate.swift */,
-				9085FBE027A9CF330042AEE2 /* ViewController.swift */,
-				9085FC0A27A9E3AD0042AEE2 /* HeroCollectionViewCell.swift */,
-				9085FC0B27A9E3AD0042AEE2 /* HeroCollectionViewCell.xib */,
-				9085FBE527A9CF340042AEE2 /* Assets.xcassets */,
-				9085FBE727A9CF340042AEE2 /* LaunchScreen.storyboard */,
-				9085FBEA27A9CF340042AEE2 /* Info.plist */,
+				9056547127AACDBE00C4469D /* App */,
+				9056547227AACDC900C4469D /* Resources */,
+				9056547327AACDDE00C4469D /* UserStories */,
 			);
 			path = "TaskForce-UIKit";
 			sourceTree = "<group>";
@@ -572,7 +609,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9085FC0D27A9E3AD0042AEE2 /* HeroCollectionViewCell.xib in Resources */,
 				9085FBE927A9CF340042AEE2 /* LaunchScreen.storyboard in Resources */,
 				9085FBE627A9CF340042AEE2 /* Assets.xcassets in Resources */,
 			);
@@ -643,8 +679,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9085FC0C27A9E3AD0042AEE2 /* HeroCollectionViewCell.swift in Sources */,
 				9085FBE127A9CF330042AEE2 /* ViewController.swift in Sources */,
+				9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */,
 				9085FBDD27A9CF330042AEE2 /* AppDelegate.swift in Sources */,
 				9085FBDF27A9CF330042AEE2 /* SceneDelegate.swift in Sources */,
 			);
@@ -965,7 +1001,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9W9U2X842Z;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "TaskForce-UIKit/Info.plist";
+				INFOPLIST_FILE = "TaskForce-UIKit/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -994,7 +1030,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9W9U2X842Z;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "TaskForce-UIKit/Info.plist";
+				INFOPLIST_FILE = "TaskForce-UIKit/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
