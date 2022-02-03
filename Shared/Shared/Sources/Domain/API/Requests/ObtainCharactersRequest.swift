@@ -8,7 +8,8 @@
 import Foundation
 
 struct ObtainCharactersRequest: APIPageableRequest {
-    typealias ResponseElement = Character
+    typealias ResultElement = Character
+    typealias Response = APIMultipleElementsResponse<ResultElement>
 
     let resource: APIResource = .characters
     let path: String? = nil

@@ -26,7 +26,7 @@ final class LiveAPIClient: APIClient {
         self.delegateQueue = delegateQueue
     }
 
-    func execute<T: APIRequest>(request: T) -> AnyPublisher<APIResponse<T.Response>, Error> {
+    func execute<T: APIRequest>(request: T) -> AnyPublisher<T.Response, Error> {
         guard let urlRequest = urlRequestBuilder.makeURLRequest(from: request) else {
             return Fail(error: Failure.failedToCreateURLRequest).eraseToAnyPublisher()
         }
@@ -47,7 +47,7 @@ final class LiveAPIClient: APIClient {
                 }
             )
             .map(\.data)
-            .decode(type: APIResponse<T.Response>.self, decoder: decoder)
+            .decode(type: T.Response.self, decoder: decoder)
             .receive(on: delegateQueue)
             .eraseToAnyPublisher()
     }

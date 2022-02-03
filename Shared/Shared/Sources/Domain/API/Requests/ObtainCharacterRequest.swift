@@ -8,7 +8,8 @@
 import Foundation
 
 struct ObtainCharacterRequest: APIRequest {
-    typealias ResponseElement = Character
+    typealias ResultElement = Character
+    typealias Response = APISingleElementResponse<ResultElement>
 
     let resource: APIResource = .characters
     let queryItems: [URLQueryItem] = []

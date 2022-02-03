@@ -8,7 +8,8 @@
 import Foundation
 
 protocol APIRequest {
-    associatedtype Response: Decodable
+    associatedtype ResultElement: Decodable
+    associatedtype Response: APIResponse<ResultElement>
 
     var method: HTTPMethod { get }
     var resource: APIResource { get }

@@ -38,8 +38,14 @@ final class LiveURLRequestBuilder: URLRequestBuilder {
         var components = URLComponents()
         components.scheme = scheme
         components.host = host
-        components.path = request.path
         components.queryItems = request.queryItems + generalQueryItems()
+
+        var path = request.resource.rawValue
+        if let requestPath = request.path {
+            path += "/\(requestPath)"
+        }
+        components.path = path
+
         guard let url = components.url else {
             return nil
         }

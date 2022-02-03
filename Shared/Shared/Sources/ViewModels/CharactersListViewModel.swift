@@ -32,7 +32,7 @@ final class CharactersListViewModel: ObservableObject {
                 self?.error = error
             }, receiveValue: { [weak self] value in
                 self?.charactersLatestPagingParameters = value.pagingParameters
-                self?.characters.append(contentsOf: value.result)
+                self?.characters.append(contentsOf: value.results)
             })
             .store(in: &cancellableBag)
     }
