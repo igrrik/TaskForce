@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  CharactersListViewController.swift
 //  TaskForce-UIKit
 //
 //  Created by Igor Kokoev on 01.02.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class CharactersListViewController: UIViewController {
 
     enum Section: Int, CaseIterable {
         case squad
@@ -194,7 +194,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UICollectionViewDelegate {
+extension CharactersListViewController: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let hero = dataSource.itemIdentifier(for: indexPath) else { fatalError() }
         let viewController = CharacterDetailsViewController(hero: hero)
