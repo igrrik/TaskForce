@@ -12,8 +12,7 @@ protocol APIRequest {
     associatedtype Response: APIResponse<ResultElement>
 
     var method: HTTPMethod { get }
-    var resource: APIResource { get }
-    var path: String? { get }
+    var endpoint: APIEndpoint { get }
     var queryItems: [URLQueryItem] { get }
 }
 
@@ -33,7 +32,17 @@ enum HTTPMethod: String {
     var value: String { rawValue.uppercased() }
 }
 
-enum APIResource: String {
-    case characters
-    case comics
+struct APIEndpoint: Equatable {
+    enum Resource: String {
+        case characters
+        case comics
+    }
+
+    let path: String
+
+    init(base: String = "/v1/public", resource: Resource, lastPathComponent: String? = nil) {
+        self.path = [base, resource.rawValue, lastPathComponent]
+            .compactMap { $0 }
+            .joined(separator: "/")
+    }
 }

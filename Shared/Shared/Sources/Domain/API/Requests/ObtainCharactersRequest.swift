@@ -11,8 +11,7 @@ struct ObtainCharactersRequest: APIPageableRequest {
     typealias ResultElement = Character
     typealias Response = APIMultipleElementsResponse<ResultElement>
 
-    let resource: APIResource = .characters
-    let path: String? = nil
+    let endpoint: APIEndpoint = .init(resource: .characters)
     let limit: UInt
     let offset: UInt
 

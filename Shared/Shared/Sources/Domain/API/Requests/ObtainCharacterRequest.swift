@@ -11,8 +11,10 @@ struct ObtainCharacterRequest: APIRequest {
     typealias ResultElement = Character
     typealias Response = APISingleElementResponse<ResultElement>
 
-    let resource: APIResource = .characters
+    let endpoint: APIEndpoint
     let queryItems: [URLQueryItem] = []
-    let characterId: UInt
-    var path: String? { String(describing: characterId) }
+
+    init(characterId: UInt) {
+        self.endpoint = .init(resource: .characters, lastPathComponent: String(describing: characterId))
+    }
 }

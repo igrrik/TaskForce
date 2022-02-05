@@ -9,5 +9,5 @@ import Foundation
 import Combine
 
 protocol URLRequestBuilder {
-    func makeURLRequest<T: APIRequest>(from request: T) -> URLRequest?
+    func makeURLRequest<T: APIRequest>(from request: T) throws -> URLRequest
 }

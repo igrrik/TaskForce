@@ -7,7 +7,6 @@
 
 import Foundation
 import Combine
-import CryptoKit
 
 final class LiveURLRequestBuilder: URLRequestBuilder {
     private let scheme: String
@@ -16,14 +15,16 @@ final class LiveURLRequestBuilder: URLRequestBuilder {
     private let publicKey: String
     private let headers: [String: String] = ["Accept": "application/json"]
     private let randomStringProvider: () -> String
-    private let hasher: (String) -> String
+    private let hasher: Hasher
+    private let timeoutInterval: TimeInterval = 10.0
+    private let cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 
     init(
         scheme: String,
         host: String,
         privateKey: String,
         publicKey: String,
-        hasher: @escaping (String) -> String,
+        hasher: Hasher,
         randomStringProvider: @escaping () -> String
     ) {
         self.scheme = scheme
@@ -34,31 +35,26 @@ final class LiveURLRequestBuilder: URLRequestBuilder {
         self.randomStringProvider = randomStringProvider
     }
 
-    func makeURLRequest<T: APIRequest>(from request: T) -> URLRequest? {
+    func makeURLRequest<T: APIRequest>(from request: T) throws -> URLRequest {
         var components = URLComponents()
         components.scheme = scheme
         components.host = host
-        components.queryItems = request.queryItems + generalQueryItems()
-
-        var path = request.resource.rawValue
-        if let requestPath = request.path {
-            path += "/\(requestPath)"
-        }
-        components.path = path
+        components.path = request.endpoint.path
+        components.queryItems = try generalQueryItems() + request.queryItems
 
         guard let url = components.url else {
-            return nil
+            throw URLConstructionFailure(components: components)
         }
-        var urlRequest = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
+        var urlRequest = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
         urlRequest.httpMethod = request.method.value
         urlRequest.allHTTPHeaderFields = headers
         return urlRequest
     }
 
-    private func generalQueryItems() -> [URLQueryItem] {
+    private func generalQueryItems() throws -> [URLQueryItem] {
         let tsParameter = randomStringProvider()
-        var hash = "\(tsParameter)\(privateKey)\(publicKey)"
-        hash = hasher(hash)
+        let stringToHash = "\(tsParameter)\(privateKey)\(publicKey)"
+        let hash = try hasher.hash(stringToHash)
 
         return [
             .init(name: "apikey", value: publicKey),
@@ -68,14 +64,9 @@ final class LiveURLRequestBuilder: URLRequestBuilder {
     }
 }
 
-extension String {
-    func md5() -> String? {
-        guard let data = data(using: .utf8) else {
-            return nil
-        }
-        return Insecure.MD5
-            .hash(data: data)
-            .map { String(format: "%02x", $0) }
-            .joined()
+extension LiveURLRequestBuilder {
+    struct URLConstructionFailure: LocalizedError {
+        let components: URLComponents
+        var errorDescription: String? { "Failed to obtain URL from components: \(components)"}
     }
 }
