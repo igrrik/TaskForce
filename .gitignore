@@ -84,3 +84,4 @@ fastlane/test_output
 
 # custom
 TaskForce/Resources/Credentials.plist
+TaskForce-UIKit/Resources/Credentials.plist

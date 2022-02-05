@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */; };
 		9056548027AC862800C4469D /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 9056547F27AC862800C4469D /* Shared */; };
+		9056548227AF2BF000C4469D /* CredentialsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9056548127AF2BF000C4469D /* CredentialsStore.swift */; };
 		9085FB6C27A6A4F90042AEE2 /* TaskForceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FB6B27A6A4F90042AEE2 /* TaskForceApp.swift */; };
 		9085FB6E27A6A4F90042AEE2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FB6D27A6A4F90042AEE2 /* ContentView.swift */; };
 		9085FB7027A6A4FA0042AEE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9085FB6F27A6A4FA0042AEE2 /* Assets.xcassets */; };
@@ -62,6 +63,8 @@
 /* Begin PBXFileReference section */
 		9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewController.swift; sourceTree = "<group>"; };
 		9056547D27AC83C400C4469D /* Shared */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Shared; sourceTree = "<group>"; };
+		9056548127AF2BF000C4469D /* CredentialsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsStore.swift; sourceTree = "<group>"; };
+		9056548327AF2BF300C4469D /* Credentials.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Credentials.plist; sourceTree = "<group>"; };
 		9085FB6827A6A4F90042AEE2 /* TaskForce.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskForce.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9085FB6B27A6A4F90042AEE2 /* TaskForceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskForceApp.swift; sourceTree = "<group>"; };
 		9085FB6D27A6A4F90042AEE2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -140,6 +143,7 @@
 			children = (
 				9085FBDC27A9CF330042AEE2 /* AppDelegate.swift */,
 				9085FBDE27A9CF330042AEE2 /* SceneDelegate.swift */,
+				9056548127AF2BF000C4469D /* CredentialsStore.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -148,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				9085FBEA27A9CF340042AEE2 /* Info.plist */,
+				9056548327AF2BF300C4469D /* Credentials.plist */,
 				9085FBE527A9CF340042AEE2 /* Assets.xcassets */,
 				9085FBE727A9CF340042AEE2 /* LaunchScreen.storyboard */,
 			);
@@ -540,6 +545,7 @@
 			files = (
 				9085FBE127A9CF330042AEE2 /* CharactersListViewController.swift in Sources */,
 				9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */,
+				9056548227AF2BF000C4469D /* CredentialsStore.swift in Sources */,
 				9085FBDD27A9CF330042AEE2 /* AppDelegate.swift in Sources */,
 				9085FBDF27A9CF330042AEE2 /* SceneDelegate.swift in Sources */,
 			);
