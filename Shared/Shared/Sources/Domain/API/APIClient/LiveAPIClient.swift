@@ -8,31 +8,49 @@
 import Foundation
 import Combine
 
+typealias DataTaskPublisher = AnyPublisher<(data: Data, response: URLResponse), Error>
+
 final class LiveAPIClient: APIClient {
-    private let session: URLSession
     private let urlRequestBuilder: URLRequestBuilder
     private let decoder: JSONDecoder
     private let delegateQueue: DispatchQueue
+    private let dataTaskPublisherProducer: (URLRequest) -> DataTaskPublisher
 
     init(
-        session: URLSession,
         urlRequestBuilder: URLRequestBuilder,
+        dataTaskPublisherProducer: @escaping (URLRequest) -> DataTaskPublisher,
         decoder: JSONDecoder,
         delegateQueue: DispatchQueue
     ) {
-        self.session = session
         self.urlRequestBuilder = urlRequestBuilder
+        self.dataTaskPublisherProducer = dataTaskPublisherProducer
         self.decoder = decoder
         self.delegateQueue = delegateQueue
     }
 
-    func execute<T: APIRequest>(request: T) -> AnyPublisher<T.Response, Error> {
-        guard let urlRequest = urlRequestBuilder.makeURLRequest(from: request) else {
-            return Fail(error: Failure.failedToCreateURLRequest).eraseToAnyPublisher()
+    convenience init(
+        urlRequestBuilder: URLRequestBuilder,
+        session: URLSession,
+        decoder: JSONDecoder,
+        delegateQueue: DispatchQueue
+    ) {
+        let producer: (URLRequest) -> DataTaskPublisher = { request in
+            session.dataTaskPublisher(for: request)
+                .mapError { $0 as Error }
+                .eraseToAnyPublisher()
         }
-        return session
-            .dataTaskPublisher(for: urlRequest)
-            .mapError { $0 as Error }
+        self.init(
+            urlRequestBuilder: urlRequestBuilder,
+            dataTaskPublisherProducer: producer,
+            decoder: decoder,
+            delegateQueue: delegateQueue
+        )
+    }
+
+    func execute<T: APIRequest>(request: T) -> AnyPublisher<T.Response, Error> {
+        return urlRequestBuilder
+            .makeURLRequestPublisher(from: request)
+            .makeDataTaskPublisher(dataTaskPublisherProducer)
             .handleEvents(
                 receiveOutput: { output in
                     print(output.response)
@@ -53,9 +71,18 @@ final class LiveAPIClient: APIClient {
     }
 }
 
-extension LiveAPIClient {
-    enum Failure: LocalizedError {
-        case failedToCreateURLRequest
-        case urlError(URLError)
+private extension Publisher where Output == URLRequest, Failure == Error {
+    func makeDataTaskPublisher(_ producer: @escaping (URLRequest) -> DataTaskPublisher) -> DataTaskPublisher {
+        flatMap { producer($0) }.eraseToAnyPublisher()
+    }
+}
+
+private extension URLRequestBuilder {
+    func makeURLRequestPublisher<T: APIRequest>(from request: T) -> AnyPublisher<URLRequest, Error> {
+        Deferred {
+            Just(request)
+                .tryMap(makeURLRequest(from:))
+        }
+        .eraseToAnyPublisher()
     }
 }
