@@ -23,8 +23,7 @@ let package = Package(
         .target(
             name: "Shared",
             dependencies: [],
-            path: "Sources",
-            resources: [.process("Resources/Credentials.plist")]
+            path: "Sources"
         ),
         .testTarget(
             name: "SharedTests",

@@ -51,19 +51,6 @@ final class LiveAPIClient: APIClient {
         return urlRequestBuilder
             .makeURLRequestPublisher(from: request)
             .makeDataTaskPublisher(dataTaskPublisherProducer)
-            .handleEvents(
-                receiveOutput: { output in
-                    print(output.response)
-                },
-                receiveCompletion: { completion in
-                    switch completion {
-                    case .failure(let error):
-                        print(error)
-                    case .finished:
-                        break
-                    }
-                }
-            )
             .map(\.data)
             .decode(type: T.Response.self, decoder: decoder)
             .receive(on: delegateQueue)
