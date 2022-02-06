@@ -31,7 +31,7 @@ final class LiveAPIClientTests: XCTestCase {
     func testThatAPIMultipleElementsResponseIsParsedCorrectly() {
         // arrange
         urlRequestBuilder.makeURLrequestReturnValue = .success(URLRequest(url: URL(string: "https://example.com")!))
-        dataTaskPublisherProducer.produceReturnValue = .success(.obtainCharactersResponse)
+        dataTaskPublisherProducer.publisherResult = .success(.obtainCharactersResponse)
         let expectedCharacters: [Character] = [.adamWarlock, .agathaHarkness]
         var receivedCharacters: [Character] = []
 
@@ -57,7 +57,7 @@ final class LiveAPIClientTests: XCTestCase {
     func testThatAPISingleElementResponseIsParsedCorrectly() {
         // arrange
         urlRequestBuilder.makeURLrequestReturnValue = .success(URLRequest(url: URL(string: "https://example.com")!))
-        dataTaskPublisherProducer.produceReturnValue = .success(.obtainCharacterResponse)
+        dataTaskPublisherProducer.publisherResult = .success(.obtainCharacterResponse)
         let expectedCharacter: Character = .adamWarlock
         var receivedCharacter: Character!
 
@@ -88,7 +88,7 @@ final class LiveAPIClientTests: XCTestCase {
         let expectedError = DummyError()
         var receivedError: DummyError!
         urlRequestBuilder.makeURLrequestReturnValue = .failure(expectedError)
-        dataTaskPublisherProducer.produceReturnValue = .success(.obtainCharacterResponse)
+        dataTaskPublisherProducer.publisherResult = .success(.obtainCharacterResponse)
 
         // act
         let expectation = XCTestExpectation(description: "Obtain character")
@@ -126,17 +126,15 @@ private final class MockURLRequestBuilder: URLRequestBuilder {
 }
 
 private final class StubDataTaskPublisherProducer {
-    enum Response: String {
-        case obtainCharactersResponse = "ObtainCharactersResponse"
-        case obtainCharacterResponse = "ObtainCharacterResponse"
-    }
+    var publisherResult: Result<JSONDataAssetProvider.JSON, Error>!
 
-    var produceReturnValue: Result<Response, Error>!
+    private let assetProvider = JSONDataAssetProvider()
 
     func publisher(for request: URLRequest) -> DataTaskPublisher {
-        switch produceReturnValue {
-        case .success(let response):
-            let tuple = convert(response)
+        switch publisherResult {
+        case .success(let jsonName):
+            let asset = assetProvider.obtainAsset(jsonName)
+            let tuple = convert(asset)
             return Just(tuple).setFailureType(to: Error.self).eraseToAnyPublisher()
         case .failure(let error):
             return Fail(outputType: (data: Data, response: URLResponse).self, failure: error).eraseToAnyPublisher()
@@ -145,11 +143,7 @@ private final class StubDataTaskPublisherProducer {
         }
     }
 
-    private func convert(_ response: Response) -> (data: Data, response: URLResponse) {
-        let responseFileName = response.rawValue
-        guard let asset = NSDataAsset(name: responseFileName, bundle: .module) else {
-            fatalError("Failed to locate json file named: \(responseFileName)")
-        }
+    private func convert(_ asset: NSDataAsset) -> (data: Data, response: URLResponse) {
         let response = URLResponse(
             url: URL(string: "https://example.com")!,
             mimeType: "application/json",
