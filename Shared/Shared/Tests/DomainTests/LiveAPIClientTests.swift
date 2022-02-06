@@ -154,7 +154,7 @@ private final class StubDataTaskPublisherProducer {
     }
 }
 
-private extension Character {
+extension Character {
     static let adamWarlock = Character(
         id: 1010354,
         name: "Adam Warlock",

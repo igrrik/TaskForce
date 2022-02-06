@@ -8,7 +8,7 @@
 import Foundation
 
 class APIResponse<ResultElement: Decodable>: Decodable {
-    fileprivate struct Data: Decodable {
+    struct Data: Decodable {
         let offset: UInt
         let limit: UInt
         let total: UInt
@@ -18,10 +18,16 @@ class APIResponse<ResultElement: Decodable>: Decodable {
 
     let code: Int
     let status: String
-    fileprivate let data: APIResponse.Data
+    let data: APIResponse.Data
 
     var offset: UInt { data.offset }
     var limit: UInt { data.limit }
+
+    init(code: Int, status: String, data: APIResponse.Data) {
+        self.code = code
+        self.status = status
+        self.data = data
+    }
 }
 
 final class APISingleElementResponse<ResultElement: Decodable>: APIResponse<ResultElement> {

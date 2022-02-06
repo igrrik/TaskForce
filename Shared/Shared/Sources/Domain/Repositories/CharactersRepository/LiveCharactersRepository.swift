@@ -23,7 +23,9 @@ extension LiveCharactersRepository: CharactersRepository {
             .eraseToAnyPublisher()
     }
 
-    func obtainCharacter(with id: Int) -> AnyPublisher<Character, Error> {
-        fatalError()
+    func obtainCharacter(with id: UInt) -> AnyPublisher<Character, Error> {
+        apiClient.execute(request: ObtainCharacterRequest(characterId: id))
+            .map(\.result)
+            .eraseToAnyPublisher()
     }
 }
