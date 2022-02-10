@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */; };
-		9056548027AC862800C4469D /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 9056547F27AC862800C4469D /* Shared */; };
 		9056548227AF2BF000C4469D /* CredentialsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9056548127AF2BF000C4469D /* CredentialsStore.swift */; };
 		9085FB6C27A6A4F90042AEE2 /* TaskForceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FB6B27A6A4F90042AEE2 /* TaskForceApp.swift */; };
 		9085FB6E27A6A4F90042AEE2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FB6D27A6A4F90042AEE2 /* ContentView.swift */; };
@@ -27,6 +26,7 @@
 		9085FBF427A9CF340042AEE2 /* TaskForce_UIKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBF327A9CF340042AEE2 /* TaskForce_UIKitTests.swift */; };
 		9085FBFE27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBFD27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift */; };
 		9085FC0027A9CF340042AEE2 /* TaskForce_UIKitUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBFF27A9CF340042AEE2 /* TaskForce_UIKitUITestsLaunchTests.swift */; };
+		90DC453A27B5D85300AF01E7 /* TaskForceCore in Frameworks */ = {isa = PBXBuildFile; productRef = 90DC453927B5D85300AF01E7 /* TaskForceCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,10 +62,10 @@
 
 /* Begin PBXFileReference section */
 		9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewController.swift; sourceTree = "<group>"; };
-		9056547D27AC83C400C4469D /* Shared */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Shared; sourceTree = "<group>"; };
 		9056548127AF2BF000C4469D /* CredentialsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsStore.swift; sourceTree = "<group>"; };
 		9056548327AF2BF300C4469D /* Credentials.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Credentials.plist; sourceTree = "<group>"; };
 		9056548427B1764400C4469D /* ImageDownloader */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ImageDownloader; sourceTree = "<group>"; };
+		905C9AE827B5D7A700432D12 /* TaskForceCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TaskForceCore; sourceTree = "<group>"; };
 		9085FB6827A6A4F90042AEE2 /* TaskForce.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskForce.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9085FB6B27A6A4F90042AEE2 /* TaskForceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskForceApp.swift; sourceTree = "<group>"; };
 		9085FB6D27A6A4F90042AEE2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9056548027AC862800C4469D /* Shared in Frameworks */,
+				90DC453A27B5D85300AF01E7 /* TaskForceCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,8 +188,8 @@
 		9056547C27AC835800C4469D /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				905C9AE827B5D7A700432D12 /* TaskForceCore */,
 				9056548427B1764400C4469D /* ImageDownloader */,
-				9056547D27AC83C400C4469D /* Shared */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -364,7 +364,7 @@
 			);
 			name = "TaskForce-UIKit";
 			packageProductDependencies = (
-				9056547F27AC862800C4469D /* Shared */,
+				90DC453927B5D85300AF01E7 /* TaskForceCore */,
 			);
 			productName = "TaskForce-UIKit";
 			productReference = 9085FBDA27A9CF330042AEE2 /* TaskForce-UIKit.app */;
@@ -1062,9 +1062,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		9056547F27AC862800C4469D /* Shared */ = {
+		90DC453927B5D85300AF01E7 /* TaskForceCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Shared;
+			productName = TaskForceCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 

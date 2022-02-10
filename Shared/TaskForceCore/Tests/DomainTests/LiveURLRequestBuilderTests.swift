@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Shared
+@testable import TaskForceCore
 
 final class LiveURLRequestBuilderTests: XCTestCase {
     private var sut: LiveURLRequestBuilder!

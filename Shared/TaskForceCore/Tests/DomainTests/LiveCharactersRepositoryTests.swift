@@ -7,7 +7,7 @@
 
 import XCTest
 import Combine
-@testable import Shared
+@testable import TaskForceCore
 
 final class LiveCharactersRepositoryTests: XCTestCase {
     private var sut: LiveCharactersRepository!

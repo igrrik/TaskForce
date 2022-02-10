@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Shared
+import TaskForceCore
 
 final class CharactersListViewController: UIViewController {
 
