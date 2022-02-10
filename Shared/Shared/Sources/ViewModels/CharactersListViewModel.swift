@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 final class CharactersListViewModel: ObservableObject {
+    @Published private(set) var isLoading: Bool = false
     @Published private(set) var error: Error?
     @Published private(set) var characters: [Character] = []
 
@@ -20,12 +21,23 @@ final class CharactersListViewModel: ObservableObject {
         self.charactersRepository = charactersRepository
     }
 
-    func loadMoreCharacters() {
-        var pagingParameters = charactersLatestPagingParameters
-        if characters.isEmpty {
-            pagingParameters = pagingParameters.nextPageParameters()
-        }
-        charactersRepository.obtainCharacters(pagingParams: pagingParameters)
+    func loadInitialData() {
+        charactersRepository
+            .obtainCharacters(pagingParams: charactersLatestPagingParameters)
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard case let .failure(error) = completion else { return }
+                self?.error = error
+            }, receiveValue: { [weak self] value in
+                self?.charactersLatestPagingParameters = value.pagingParameters
+                self?.characters.append(contentsOf: value.results)
+            })
+            .store(in: &cancellableBag)
+    }
+
+    func loadMoreData() {
+        charactersRepository
+            .obtainCharacters(pagingParams: charactersLatestPagingParameters.nextPageParameters())
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
                 guard case let .failure(error) = completion else { return }

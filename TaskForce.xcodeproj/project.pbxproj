@@ -65,6 +65,7 @@
 		9056547D27AC83C400C4469D /* Shared */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Shared; sourceTree = "<group>"; };
 		9056548127AF2BF000C4469D /* CredentialsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsStore.swift; sourceTree = "<group>"; };
 		9056548327AF2BF300C4469D /* Credentials.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Credentials.plist; sourceTree = "<group>"; };
+		9056548427B1764400C4469D /* ImageDownloader */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ImageDownloader; sourceTree = "<group>"; };
 		9085FB6827A6A4F90042AEE2 /* TaskForce.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskForce.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9085FB6B27A6A4F90042AEE2 /* TaskForceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskForceApp.swift; sourceTree = "<group>"; };
 		9085FB6D27A6A4F90042AEE2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -187,6 +188,7 @@
 		9056547C27AC835800C4469D /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				9056548427B1764400C4469D /* ImageDownloader */,
 				9056547D27AC83C400C4469D /* Shared */,
 			);
 			path = Shared;

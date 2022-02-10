@@ -12,12 +12,7 @@ struct Character: Identifiable, Decodable, Equatable {
     let name: String
     let description: String
     let thumbnail: Thumbnail
-    let isHired: Bool = false
-
-    struct Thumbnail: Decodable, Equatable {
-        let path: String
-        let `extension`: String
-    }
+    let isRecruited: Bool = false
 
     private enum CodingKeys: String, CodingKey {
         case id
