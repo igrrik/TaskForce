@@ -46,6 +46,7 @@ where S.Input == UIImage, S.Failure == Error {
                 switch result {
                 case .success(let imageResult):
                     _ = self?.subscriber?.receive(imageResult.image)
+                    self?.subscriber?.receive(completion: .finished)
                 case .failure(let error):
                     _ = self?.subscriber?.receive(completion: .failure(error))
                 }
