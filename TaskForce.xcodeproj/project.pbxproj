@@ -231,6 +231,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9085FC0127A9CF340042AEE2 /* Build configuration list for PBXNativeTarget "TaskForce-UIKit" */;
 			buildPhases = (
+				90DC455527B9B39E00AF01E7 /* Swiftlint */,
 				9085FBD627A9CF330042AEE2 /* Sources */,
 				9085FBD727A9CF330042AEE2 /* Frameworks */,
 				9085FBD827A9CF330042AEE2 /* Resources */,
@@ -353,6 +354,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		90DC455527B9B39E00AF01E7 /* Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Swiftlint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftlint >/dev/null; then\n  swiftlint --fix && swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9085FBD627A9CF330042AEE2 /* Sources */ = {

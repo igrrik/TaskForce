@@ -22,7 +22,7 @@ public struct Character: Hashable {
     }
 
     public static func == (lhs: Character, rhs: Character) -> Bool {
-        lhs.id == rhs.id        
+        lhs.id == rhs.id
     }
 
     public func hash(into hasher: inout Hasher) {

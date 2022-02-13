@@ -132,7 +132,6 @@ private extension CharactersListViewController {
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-
     func applySquadSnaphot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CharactersListCellModel>) {
         guard collectionView.numberOfSections == 1 else {
             dataSource.apply(snapshot, to: .squad, animatingDifferences: true)

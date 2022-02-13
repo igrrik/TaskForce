@@ -7,6 +7,7 @@
 
 import Foundation
 
+// swiftlint:disable:next final_class
 public class APIResponse<ResultElement: Decodable>: Decodable {
     struct Data: Decodable {
         let offset: UInt

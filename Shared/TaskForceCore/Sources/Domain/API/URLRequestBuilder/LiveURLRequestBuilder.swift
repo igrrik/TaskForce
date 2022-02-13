@@ -67,6 +67,6 @@ public final class LiveURLRequestBuilder: URLRequestBuilder {
 extension LiveURLRequestBuilder {
     struct URLConstructionFailure: LocalizedError {
         let components: URLComponents
-        var errorDescription: String? { "Failed to obtain URL from components: \(components)"}
+        var errorDescription: String? { "Failed to obtain URL from components: \(components)" }
     }
 }

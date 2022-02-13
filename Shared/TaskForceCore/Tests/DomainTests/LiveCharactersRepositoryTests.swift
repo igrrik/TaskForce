@@ -52,7 +52,6 @@ final class LiveCharactersRepositoryTests: XCTestCase {
             .store(in: &cancellableBag)
         wait(for: [expectation], timeout: 1.0)
 
-
         // assert
         XCTAssertEqual(expectedResponse, receivedResponse)
     }
@@ -79,7 +78,6 @@ final class LiveCharactersRepositoryTests: XCTestCase {
             }
             .store(in: &cancellableBag)
         wait(for: [expectation], timeout: 1.0)
-
 
         // assert
         XCTAssertEqual(expectedResponse, receivedResponse)

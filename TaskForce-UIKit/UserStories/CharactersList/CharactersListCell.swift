@@ -48,7 +48,7 @@ final class CharactersListCell: UICollectionViewListCell {
         var background = UIBackgroundConfiguration.listPlainCell()
         background.cornerRadius = Constants.cornerRadius
         background.backgroundColor = .marvelGreyLight
-        backgroundConfiguration = background 
+        backgroundConfiguration = background
 
         var options = UICellAccessory.DisclosureIndicatorOptions()
         options.tintColor = Constants.disclosureIndicatorTintColor

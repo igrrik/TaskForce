@@ -56,7 +56,7 @@ final class LiveURLRequestBuilderTests: XCTestCase {
 
         // act
         do {
-            let _ = try sut.makeURLRequest(from: FailingRequest())
+            _ = try sut.makeURLRequest(from: FailingRequest())
             XCTFail("Make URL request should throw error")
         } catch let error as LiveURLRequestBuilder.URLConstructionFailure {
             // assert

@@ -62,7 +62,7 @@ where S.Input == UIImage, S.Failure == Error {
         self.imageRetriever = imageRetriever
     }
 
-    func request(_ demand: Subscribers.Demand) {        
+    func request(_ demand: Subscribers.Demand) {
         downloadTask = imageRetriever.retrieveImage(with: url) { [weak self] result in
             switch result {
             case .success(let image):

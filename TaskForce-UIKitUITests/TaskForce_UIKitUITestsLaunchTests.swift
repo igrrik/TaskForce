@@ -7,7 +7,7 @@
 
 import XCTest
 
-class TaskForce_UIKitUITestsLaunchTests: XCTestCase {
+final class TaskForce_UIKitUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

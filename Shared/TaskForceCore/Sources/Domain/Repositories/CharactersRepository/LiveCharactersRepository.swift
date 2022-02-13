@@ -19,6 +19,9 @@ public final class LiveCharactersRepository {
 extension LiveCharactersRepository: CharactersRepository {
     public func obtainCharacters(pagingParams: PagingParameters) -> AnyPublisher<PageableResponse<Character>, Error> {
         apiClient.execute(request: ObtainCharactersRequest(limit: pagingParams.limit, offset: pagingParams.offset))
+            .handleEvents(receiveOutput: { response in
+                print(response)
+            })
             .map(PageableResponse.init(apiResponse:))
             .eraseToAnyPublisher()
     }
