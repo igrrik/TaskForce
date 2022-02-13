@@ -22,7 +22,7 @@ final class CharactersListViewController: UIViewController {
     private lazy var dataSource: DataSource = DataSource.create(collectionView: collectionView)
     private lazy var collectionView = UICollectionView(
         frame: view.bounds,
-        collectionViewLayout: CharactersListSection.makeCompositionalLayout()
+        collectionViewLayout: CharactersListSection.makeCompositionalLayout(viewModel: viewModel)
     )
 
     init(viewModel: CharactersListViewModel) {
@@ -74,17 +74,26 @@ private extension CharactersListViewController {
     }
 
     func applyInitialSnapshots() {
-        let sections = CharactersListSection.allCases
         var snapshot = NSDiffableDataSourceSnapshot<CharactersListSection, CharactersListCellModel>()
-        snapshot.appendSections(sections)
+        snapshot.appendSections([.allCharacters])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     func configureBindings() {
         viewModel.$squad
+            .filter { !$0.isEmpty }
             .makeSnapshot()
             .sink { [weak self] snapshot in
-                self?.dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
+                guard let self = self else { return }
+                if self.collectionView.numberOfSections == 1 {
+                    var currentSnapshot = self.dataSource.snapshot()
+                    currentSnapshot.insertSections([.squad], beforeSection: .allCharacters)
+                    self.dataSource.apply(currentSnapshot, animatingDifferences: true) { [weak self] in
+                        self?.dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
+                    }
+                } else {
+                    self.dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
+                }
             }
             .store(in: &cancellableBag)
 
@@ -109,6 +118,13 @@ private extension DataSource {
         }
 
         let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, model in
+            guard collectionView.numberOfSections > 1 else {
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: listCellRegistration,
+                    for: indexPath,
+                    item: model
+                )
+            }
             guard let sectionKind = CharactersListSection(rawValue: indexPath.section) else {
                 fatalError("Unknown section")
             }
@@ -129,6 +145,7 @@ private extension DataSource {
         }
 
         dataSource.supplementaryViewProvider = { collectionView, kind, index in
+            guard collectionView.numberOfSections > 1 else { return nil }
             guard kind == CharactersListTitleView.kind else { fatalError() }
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
@@ -138,10 +155,13 @@ private extension DataSource {
 }
 
 private extension CharactersListSection {
-    static func makeCompositionalLayout() -> UICollectionViewCompositionalLayout {
+    static func makeCompositionalLayout(viewModel: CharactersListViewModel) -> UICollectionViewCompositionalLayout {
         let provider: UICollectionViewCompositionalLayoutSectionProvider = { sectionIndex, environment in
+            guard !viewModel.squad.isEmpty else {
+                return makeAllCharactersLayout()
+            }
             guard let section = Self(rawValue: sectionIndex) else {
-                return nil
+                fatalError()
             }
             switch section {
             case .squad:
@@ -169,7 +189,7 @@ private extension CharactersListSection {
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8)
         let sectionLayout = NSCollectionLayoutSection(group: group)
         sectionLayout.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-        sectionLayout.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: leadingInset, bottom: 16, trailing: 16)
+        sectionLayout.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: leadingInset, bottom: 0, trailing: 16)
 
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(
@@ -193,7 +213,7 @@ private extension CharactersListSection {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         let sectionLayout = NSCollectionLayoutSection(group: group)
         sectionLayout.interGroupSpacing = 16
-        sectionLayout.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
+        sectionLayout.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
         return sectionLayout
     }
 }
