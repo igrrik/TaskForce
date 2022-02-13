@@ -38,7 +38,8 @@ final class CharactersListTitleView: UICollectionReusableView {
         addSubview(label)
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: leadingAnchor),
-            label.topAnchor.constraint(equalTo: topAnchor),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor),
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             label.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

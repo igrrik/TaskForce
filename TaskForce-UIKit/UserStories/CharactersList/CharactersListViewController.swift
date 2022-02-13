@@ -73,27 +73,12 @@ private extension CharactersListViewController {
         view.addSubview(collectionView)
     }
 
-    func applyInitialSnapshots() {
-        var snapshot = NSDiffableDataSourceSnapshot<CharactersListSection, CharactersListCellModel>()
-        snapshot.appendSections([.allCharacters])
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
-
     func configureBindings() {
         viewModel.$squad
             .filter { !$0.isEmpty }
             .makeSnapshot()
             .sink { [weak self] snapshot in
-                guard let self = self else { return }
-                if self.collectionView.numberOfSections == 1 {
-                    var currentSnapshot = self.dataSource.snapshot()
-                    currentSnapshot.insertSections([.squad], beforeSection: .allCharacters)
-                    self.dataSource.apply(currentSnapshot, animatingDifferences: true) { [weak self] in
-                        self?.dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
-                    }
-                } else {
-                    self.dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
-                }
+                self?.applySquadSnaphot(snapshot)
             }
             .store(in: &cancellableBag)
 
@@ -103,6 +88,25 @@ private extension CharactersListViewController {
                 self?.dataSource.apply(snapshot, to: .allCharacters, animatingDifferences: true)
             }
             .store(in: &cancellableBag)
+    }
+
+    func applyInitialSnapshots() {
+        var snapshot = NSDiffableDataSourceSnapshot<CharactersListSection, CharactersListCellModel>()
+        snapshot.appendSections([.allCharacters])
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+
+
+    func applySquadSnaphot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CharactersListCellModel>) {
+        guard collectionView.numberOfSections == 1 else {
+            dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
+            return
+        }
+        var currentSnapshot = dataSource.snapshot()
+        currentSnapshot.insertSections([.squad], beforeSection: .allCharacters)
+        dataSource.apply(currentSnapshot, animatingDifferences: true) { [weak self] in
+            self?.dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
+        }
     }
 }
 
@@ -170,7 +174,6 @@ private extension CharactersListSection {
                 return makeAllCharactersLayout()
             }
         }
-
         return UICollectionViewCompositionalLayout(sectionProvider: provider)
     }
 
@@ -194,7 +197,7 @@ private extension CharactersListSection {
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(25)
+                heightDimension: .estimated(41) // TODO: replace with value provided by title view
             ),
             elementKind: CharactersListTitleView.kind,
             alignment: .topLeading
