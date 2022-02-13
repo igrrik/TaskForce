@@ -11,9 +11,12 @@ public struct Thumbnail: Decodable, Equatable {
     let path: String
     let `extension`: String
 
-    public func urlForVariant(_ variant: Variant) -> URL? {
+    public func urlForVariant(_ variant: Variant) -> URL {
         let urlString = path + variant.stringValue + "." + self.extension
-        return URL(string: urlString)
+        guard let url = URL(string: urlString) else {
+            fatalError()
+        }
+        return url
     }
 }
 

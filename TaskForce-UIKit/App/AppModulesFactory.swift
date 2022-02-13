@@ -27,16 +27,19 @@ public final class AppModulesFactory {
     private lazy var charactersRepository = LiveCharactersRepository(apiClient: apiClient)
     private lazy var imageDownloader = KingfisherImageDownloader()
 
-    func makeCharactersListModule() -> UIViewController {
+    func makeCharactersListModule() -> (CharactersListViewModel, UIViewController) {
         let viewModel = CharactersListViewModel(
             charactersRepository: charactersRepository,
             imageDownloader: imageDownloader
         )
-        return CharactersListViewController(viewModel: viewModel)
+        let controller = CharactersListViewController(viewModel: viewModel)
+        return (viewModel, controller)
     }
 
-    func makeCharacterDetailsModule(_ character: Character) -> UIViewController {
-        fatalError()
+    func makeCharacterDetailsModule(_ character: Character) -> (CharacterDetailsViewModel, UIViewController) {
+        let viewModel = CharacterDetailsViewModel(character: character, imageDownloader: imageDownloader)
+        let controller = CharacterDetailsViewController(viewModel: viewModel)
+        return (viewModel, controller)
     }
 }
 

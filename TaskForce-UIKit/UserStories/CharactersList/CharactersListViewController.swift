@@ -46,8 +46,11 @@ final class CharactersListViewController: UIViewController {
 
 extension CharactersListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let viewController = CharacterDetailsViewController(hero: .blackPanther)
-        navigationController?.pushViewController(viewController, animated: true)
+        guard let model = dataSource.itemIdentifier(for: indexPath) else {
+            assertionFailure("Failed to obtain CharactersListCellModel")
+            return
+        }
+        viewModel.didSelectCharacter(with: model.characterId)
     }
 }
 

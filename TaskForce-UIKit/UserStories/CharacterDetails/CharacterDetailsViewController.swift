@@ -6,29 +6,31 @@
 //
 
 import UIKit
+import Combine
 
 final class CharacterDetailsViewController: UIViewController {
-    private let hero: Hero
+    private let viewModel: CharacterDetailsViewModel
     private lazy var scrollView = UIScrollView()
-    private lazy var imageView = UIImageView(image: hero.image)
+    private lazy var imageView = UIImageView()
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.text = hero.name
+        label.text = viewModel.name
         label.textColor = .white
         label.font = .systemFont(ofSize: 34, weight: .bold)
         return label
     }()
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = hero.descriptionText
+        label.text = viewModel.info
         label.textColor = .white
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 17, weight: .regular)
         return label
     }()
+    private var cancellableBag = Set<AnyCancellable>()
 
-    init(hero: Hero) {
-        self.hero = hero
+    init(viewModel: CharacterDetailsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,11 +42,17 @@ final class CharacterDetailsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .marvelBackground
         configureLayout()
+        configureBindings()
+    }
+
+    private func configureBindings() {
+        viewModel.$image
+            .assign(to: \.image, on: imageView)
+            .store(in: &cancellableBag)
     }
 
     private func configureLayout() {
         view.addSubview(scrollView)
-        scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         let frameGuide = scrollView.frameLayoutGuide
         NSLayoutConstraint.activate([

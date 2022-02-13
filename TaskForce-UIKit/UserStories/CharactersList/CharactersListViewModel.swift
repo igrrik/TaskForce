@@ -15,7 +15,13 @@ enum CharactersListSection: Int, CaseIterable {
     case allCharacters
 }
 
-final class CharactersListViewModel: ObservableObject {
+final class CharactersListViewModel: ObservableObject, Routable {
+    enum RoutableEvent {
+        case didSelectCharacter(Character)
+    }
+
+    let routingAction: AnyPublisher<RoutableEvent, Never>
+
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var error: Error?
     @Published private(set) var squad: [CharactersListCellModel] = []
@@ -23,13 +29,15 @@ final class CharactersListViewModel: ObservableObject {
 
     private let charactersRepository: CharactersRepository
     private let imageDownloader: ImageDownloader
+    private let routingSubject = PassthroughSubject<RoutableEvent, Never>()
     private var charactersLatestPagingParameters = PagingParameters()
     private var cancellableBag = Set<AnyCancellable>()
-    private var characters: Set<Character> = .init()
+    private var characters: [UInt: Character] = .init()
 
     init(charactersRepository: CharactersRepository, imageDownloader: ImageDownloader) {
         self.charactersRepository = charactersRepository
         self.imageDownloader = imageDownloader
+        self.routingAction = routingSubject.eraseToAnyPublisher()
     }
 
     func obtainInitialData() {
@@ -60,9 +68,19 @@ final class CharactersListViewModel: ObservableObject {
             .store(in: &cancellableBag)
     }
 
+    func didSelectCharacter(with id: UInt) {
+        guard let character = characters[id] else {
+            assertionFailure("Failed to obtain character with id: \(id)")
+            return
+        }
+        routingSubject.send(.didSelectCharacter(character))
+    }
+
     private func processNewCharacters(_ newCharacters: PageableResponse<Character>) {
         charactersLatestPagingParameters = newCharacters.pagingParameters
-        characters.formUnion(newCharacters.results)
+        newCharacters.results.forEach { character in
+            characters[character.id] = character
+        }
 
         squad.append(contentsOf: newCharacters.squadMembersCellModels(imageDownloader: imageDownloader))
         allCharacters.append(contentsOf: newCharacters.cellModels(imageDownloader: imageDownloader))
@@ -72,7 +90,7 @@ final class CharactersListViewModel: ObservableObject {
 private extension PageableResponse where Result == Character {
     func squadMembersCellModels(imageDownloader: ImageDownloader) -> [CharactersListCellModel] {
         results
-            .filter { $0.isRecruited }
+            .prefix(1)
             .map { CharactersListCellModel(character: $0, imageDownloader: imageDownloader) }
     }
 

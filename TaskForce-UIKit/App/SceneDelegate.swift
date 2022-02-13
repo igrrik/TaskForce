@@ -9,7 +9,6 @@ import UIKit
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    private let appModulesFactory = AppModulesFactory()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -19,8 +18,9 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: windowScene)
         // TODO: move to coordinator
-        let listController = appModulesFactory.makeCharactersListModule()
-        window.rootViewController = UINavigationController(rootViewController: listController)
+        let appFlowController = AppFlowController(appModulesFactory: .init())
+        window.rootViewController = appFlowController
+        appFlowController.start()
         window.makeKeyAndVisible()
         self.window = window
     }
