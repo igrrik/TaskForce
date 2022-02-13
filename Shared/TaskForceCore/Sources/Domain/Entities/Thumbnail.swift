@@ -7,17 +7,17 @@
 
 import Foundation
 
-struct Thumbnail: Decodable, Equatable {
+public struct Thumbnail: Decodable, Equatable {
     let path: String
     let `extension`: String
 
-    func urlForVariant(_ variant: Variant) -> URL? {
+    public func urlForVariant(_ variant: Variant) -> URL? {
         let urlString = path + variant.stringValue + self.extension
         return URL(string: urlString)
     }
 }
 
-extension Thumbnail {
+public extension Thumbnail {
     enum Variant {
         case portrait(PortraitSize)
         case square(SquareSize)

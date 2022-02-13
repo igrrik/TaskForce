@@ -8,8 +8,10 @@
 import Foundation
 import CryptoKit
 
-final class MD5Hasher: Hasher {
-    func hash(_ string: String) throws -> String {
+public final class MD5Hasher: Hasher {
+    public init() {}
+
+    public func hash(_ string: String) throws -> String {
         guard let data = string.data(using: .utf8) else {
             throw DataConversionFailure(string: string, encoding: .utf8)
         }

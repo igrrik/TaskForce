@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-protocol CharactersRepository {
+public protocol CharactersRepository {
     func obtainCharacters(pagingParams: PagingParameters) -> AnyPublisher<PageableResponse<Character>, Error>
     func obtainCharacter(with id: UInt) -> AnyPublisher<Character, Error>
 }

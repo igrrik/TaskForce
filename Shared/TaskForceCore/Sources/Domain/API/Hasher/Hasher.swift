@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol Hasher {
+public protocol Hasher {
     func hash(_ string: String) throws -> String
 }

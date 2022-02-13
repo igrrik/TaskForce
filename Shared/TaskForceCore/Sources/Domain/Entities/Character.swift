@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct Character: Identifiable, Decodable, Equatable {
-    let id: UInt
-    let name: String
-    let description: String
-    let thumbnail: Thumbnail
-    let isRecruited: Bool = false
+public struct Character: Identifiable, Decodable, Equatable {
+    public let id: UInt
+    public let name: String
+    public let description: String
+    public let thumbnail: Thumbnail
+    public let isRecruited: Bool = false
 
     private enum CodingKeys: String, CodingKey {
         case id

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol APIRequest {
+public protocol APIRequest {
     associatedtype ResultElement: Decodable
     associatedtype Response: APIResponse<ResultElement>
 
@@ -25,14 +25,14 @@ protocol APIPageableRequest: APIRequest {
     var offset: UInt { get }
 }
 
-enum HTTPMethod: String {
+public enum HTTPMethod: String {
     case GET
     case POST
 
     var value: String { rawValue.uppercased() }
 }
 
-struct APIEndpoint: Equatable {
+public struct APIEndpoint: Equatable {
     enum Resource: String {
         case characters
         case comics

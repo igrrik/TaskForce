@@ -8,6 +8,6 @@
 import Foundation
 import Combine
 
-protocol URLRequestBuilder {
+public protocol URLRequestBuilder {
     func makeURLRequest<T: APIRequest>(from request: T) throws -> URLRequest
 }

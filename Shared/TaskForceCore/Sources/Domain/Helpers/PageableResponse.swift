@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PageableResponse<Result>: Equatable where Result: Decodable & Equatable {
+public struct PageableResponse<Result>: Equatable where Result: Decodable & Equatable {
     let offset: UInt
     let limit: UInt
     let results: [Result]

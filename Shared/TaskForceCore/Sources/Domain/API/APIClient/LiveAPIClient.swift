@@ -8,15 +8,15 @@
 import Foundation
 import Combine
 
-typealias DataTaskPublisher = AnyPublisher<(data: Data, response: URLResponse), Error>
+public typealias DataTaskPublisher = AnyPublisher<(data: Data, response: URLResponse), Error>
 
-final class LiveAPIClient: APIClient {
+public final class LiveAPIClient: APIClient {
     private let urlRequestBuilder: URLRequestBuilder
     private let decoder: JSONDecoder
     private let delegateQueue: DispatchQueue
     private let dataTaskPublisherProducer: (URLRequest) -> DataTaskPublisher
 
-    init(
+    public init(
         urlRequestBuilder: URLRequestBuilder,
         dataTaskPublisherProducer: @escaping (URLRequest) -> DataTaskPublisher,
         decoder: JSONDecoder,
@@ -28,7 +28,7 @@ final class LiveAPIClient: APIClient {
         self.delegateQueue = delegateQueue
     }
 
-    convenience init(
+    public convenience init(
         urlRequestBuilder: URLRequestBuilder,
         session: URLSession,
         decoder: JSONDecoder,
@@ -47,7 +47,7 @@ final class LiveAPIClient: APIClient {
         )
     }
 
-    func execute<T: APIRequest>(request: T) -> AnyPublisher<T.Response, Error> {
+    public func execute<T: APIRequest>(request: T) -> AnyPublisher<T.Response, Error> {
         return urlRequestBuilder
             .makeURLRequestPublisher(from: request)
             .makeDataTaskPublisher(dataTaskPublisherProducer)

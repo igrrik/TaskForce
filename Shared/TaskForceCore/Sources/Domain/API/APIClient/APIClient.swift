@@ -8,6 +8,6 @@
 import Foundation
 import Combine
 
-protocol APIClient {
+public protocol APIClient {
     func execute<T: APIRequest>(request: T) -> AnyPublisher<T.Response, Error>
 }

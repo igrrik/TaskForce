@@ -8,20 +8,20 @@
 import Foundation
 import Combine
 
-final class CharactersListViewModel: ObservableObject {
-    @Published private(set) var isLoading: Bool = false
-    @Published private(set) var error: Error?
-    @Published private(set) var characters: [Character] = []
+public final class CharactersListViewModel: ObservableObject {
+    @Published public private(set) var isLoading: Bool = false
+    @Published public private(set) var error: Error?
+    @Published public private(set) var characters: [Character] = []
 
     private let charactersRepository: CharactersRepository
     private var charactersLatestPagingParameters = PagingParameters()
     private var cancellableBag = Set<AnyCancellable>()
 
-    init(charactersRepository: CharactersRepository) {
+    public init(charactersRepository: CharactersRepository) {
         self.charactersRepository = charactersRepository
     }
 
-    func loadInitialData() {
+    public func obtainInitialData() {
         charactersRepository
             .obtainCharacters(pagingParams: charactersLatestPagingParameters)
             .receive(on: RunLoop.main)
@@ -35,7 +35,7 @@ final class CharactersListViewModel: ObservableObject {
             .store(in: &cancellableBag)
     }
 
-    func loadMoreData() {
+    public func obtainMoreData() {
         charactersRepository
             .obtainCharacters(pagingParams: charactersLatestPagingParameters.nextPageParameters())
             .receive(on: RunLoop.main)

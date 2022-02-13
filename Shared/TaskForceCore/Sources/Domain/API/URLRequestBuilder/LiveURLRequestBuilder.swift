@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class LiveURLRequestBuilder: URLRequestBuilder {
+public final class LiveURLRequestBuilder: URLRequestBuilder {
     private let scheme: String
     private let host: String
     private let privateKey: String
@@ -19,7 +19,7 @@ final class LiveURLRequestBuilder: URLRequestBuilder {
     private let timeoutInterval: TimeInterval = 10.0
     private let cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 
-    init(
+    public init(
         scheme: String,
         host: String,
         privateKey: String,
@@ -35,7 +35,7 @@ final class LiveURLRequestBuilder: URLRequestBuilder {
         self.randomStringProvider = randomStringProvider
     }
 
-    func makeURLRequest<T: APIRequest>(from request: T) throws -> URLRequest {
+    public func makeURLRequest<T: APIRequest>(from request: T) throws -> URLRequest {
         var components = URLComponents()
         components.scheme = scheme
         components.host = host

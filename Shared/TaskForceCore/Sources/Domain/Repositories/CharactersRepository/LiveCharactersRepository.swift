@@ -8,22 +8,22 @@
 import Foundation
 import Combine
 
-final class LiveCharactersRepository {
+public final class LiveCharactersRepository {
     private let apiClient: APIClient
 
-    init(apiClient: APIClient) {
+    public init(apiClient: APIClient) {
         self.apiClient = apiClient
     }
 }
 
 extension LiveCharactersRepository: CharactersRepository {
-    func obtainCharacters(pagingParams: PagingParameters) -> AnyPublisher<PageableResponse<Character>, Error> {
+    public func obtainCharacters(pagingParams: PagingParameters) -> AnyPublisher<PageableResponse<Character>, Error> {
         apiClient.execute(request: ObtainCharactersRequest(limit: pagingParams.limit, offset: pagingParams.offset))
             .map(PageableResponse.init(apiResponse:))
             .eraseToAnyPublisher()
     }
 
-    func obtainCharacter(with id: UInt) -> AnyPublisher<Character, Error> {
+    public func obtainCharacter(with id: UInt) -> AnyPublisher<Character, Error> {
         apiClient.execute(request: ObtainCharacterRequest(characterId: id))
             .map(\.result)
             .eraseToAnyPublisher()

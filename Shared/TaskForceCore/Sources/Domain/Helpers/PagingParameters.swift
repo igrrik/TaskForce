@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PagingParameters {
+public struct PagingParameters {
     @Clamping(1...100) var limit: UInt = 20
     var offset: UInt = 0
 

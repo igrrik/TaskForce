@@ -7,7 +7,7 @@
 
 import Foundation
 
-class APIResponse<ResultElement: Decodable>: Decodable {
+public class APIResponse<ResultElement: Decodable>: Decodable {
     struct Data: Decodable {
         let offset: UInt
         let limit: UInt
