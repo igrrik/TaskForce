@@ -19,7 +19,12 @@ extension UIColor {
 final class CharactersListViewController: UIViewController {
     private let viewModel: CharactersListViewModel
     private var cancellableBag = Set<AnyCancellable>()
-    private lazy var dataSource: DataSource = DataSource.create(collectionView: collectionView)
+    private lazy var dataSource = DataSource.create(collectionView: collectionView)
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        return indicator
+    }()
     private lazy var collectionView = UICollectionView(
         frame: view.bounds,
         collectionViewLayout: CharactersListSection.makeCompositionalLayout(viewModel: viewModel)
@@ -38,6 +43,7 @@ final class CharactersListViewController: UIViewController {
         super.viewDidLoad()
         configureNavigationBar()
         configureCollectionView()
+        configureLoadingIndicator()
         applyInitialSnapshots()
         configureBindings()
         viewModel.obtainInitialData()
@@ -77,6 +83,16 @@ private extension CharactersListViewController {
     }
 
     func configureBindings() {
+        viewModel.$isLoading
+            .sink { [weak self] isLoading in
+                if isLoading {
+                    self?.loadingIndicator.startAnimating()
+                } else {
+                    self?.loadingIndicator.stopAnimating()
+                }
+            }
+            .store(in: &cancellableBag)
+
         viewModel.$squad
             .filter { !$0.isEmpty }
             .makeSnapshot()
@@ -91,6 +107,15 @@ private extension CharactersListViewController {
                 self?.dataSource.apply(snapshot, to: .allCharacters, animatingDifferences: true)
             }
             .store(in: &cancellableBag)
+    }
+
+    func configureLoadingIndicator() {
+        view.addSubview(loadingIndicator)
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 
     func applyInitialSnapshots() {
