@@ -22,6 +22,11 @@
 		90DC454027B8F52400AF01E7 /* ImageDownloader in Frameworks */ = {isa = PBXBuildFile; productRef = 90DC453F27B8F52400AF01E7 /* ImageDownloader */; };
 		90DC454227B8FA4400AF01E7 /* CharactersListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454127B8FA4400AF01E7 /* CharactersListViewModel.swift */; };
 		90DC454427B8FA4700AF01E7 /* CharacterDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454327B8FA4700AF01E7 /* CharacterDetailsViewModel.swift */; };
+		90DC454627B9011900AF01E7 /* SquadMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454527B9011900AF01E7 /* SquadMemberCell.swift */; };
+		90DC454827B9047900AF01E7 /* Hero.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454727B9047900AF01E7 /* Hero.swift */; };
+		90DC454A27B904CA00AF01E7 /* CharactersListTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454927B904CA00AF01E7 /* CharactersListTitleView.swift */; };
+		90DC454C27B9200100AF01E7 /* CharactersListCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454B27B9200100AF01E7 /* CharactersListCellModel.swift */; };
+		90DC454E27B923ED00AF01E7 /* CharactersListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454D27B923ED00AF01E7 /* CharactersListCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +67,11 @@
 		90DC453B27B8F1D500AF01E7 /* AppModulesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModulesFactory.swift; sourceTree = "<group>"; };
 		90DC454127B8FA4400AF01E7 /* CharactersListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListViewModel.swift; sourceTree = "<group>"; };
 		90DC454327B8FA4700AF01E7 /* CharacterDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewModel.swift; sourceTree = "<group>"; };
+		90DC454527B9011900AF01E7 /* SquadMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadMemberCell.swift; sourceTree = "<group>"; };
+		90DC454727B9047900AF01E7 /* Hero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hero.swift; sourceTree = "<group>"; };
+		90DC454927B904CA00AF01E7 /* CharactersListTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListTitleView.swift; sourceTree = "<group>"; };
+		90DC454B27B9200100AF01E7 /* CharactersListCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListCellModel.swift; sourceTree = "<group>"; };
+		90DC454D27B923ED00AF01E7 /* CharactersListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +126,7 @@
 		9056547327AACDDE00C4469D /* UserStories */ = {
 			isa = PBXGroup;
 			children = (
+				90DC454727B9047900AF01E7 /* Hero.swift */,
 				9056547527AB3FC400C4469D /* CharacterDetails */,
 				9056547427AB3FB100C4469D /* CharactersList */,
 			);
@@ -127,6 +138,10 @@
 			children = (
 				90DC454127B8FA4400AF01E7 /* CharactersListViewModel.swift */,
 				9085FBE027A9CF330042AEE2 /* CharactersListViewController.swift */,
+				90DC454B27B9200100AF01E7 /* CharactersListCellModel.swift */,
+				90DC454527B9011900AF01E7 /* SquadMemberCell.swift */,
+				90DC454D27B923ED00AF01E7 /* CharactersListCell.swift */,
+				90DC454927B904CA00AF01E7 /* CharactersListTitleView.swift */,
 			);
 			path = CharactersList;
 			sourceTree = "<group>";
@@ -340,12 +355,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				9085FBE127A9CF330042AEE2 /* CharactersListViewController.swift in Sources */,
+				90DC454C27B9200100AF01E7 /* CharactersListCellModel.swift in Sources */,
 				90DC454427B8FA4700AF01E7 /* CharacterDetailsViewModel.swift in Sources */,
 				9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */,
+				90DC454A27B904CA00AF01E7 /* CharactersListTitleView.swift in Sources */,
 				90DC454227B8FA4400AF01E7 /* CharactersListViewModel.swift in Sources */,
 				9056548227AF2BF000C4469D /* CredentialsStore.swift in Sources */,
+				90DC454827B9047900AF01E7 /* Hero.swift in Sources */,
 				9085FBDD27A9CF330042AEE2 /* AppDelegate.swift in Sources */,
+				90DC454627B9011900AF01E7 /* SquadMemberCell.swift in Sources */,
 				90DC453C27B8F1D500AF01E7 /* AppModulesFactory.swift in Sources */,
+				90DC454E27B923ED00AF01E7 /* CharactersListCell.swift in Sources */,
 				9085FBDF27A9CF330042AEE2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

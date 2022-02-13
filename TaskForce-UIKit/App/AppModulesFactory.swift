@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ImageDownloader
 import TaskForceCore
 
 public final class AppModulesFactory {
@@ -24,9 +25,13 @@ public final class AppModulesFactory {
         delegateQueue: .main
     )
     private lazy var charactersRepository = LiveCharactersRepository(apiClient: apiClient)
+    private lazy var imageDownloader = KingfisherImageDownloader()
 
     func makeCharactersListModule() -> UIViewController {
-        let viewModel = CharactersListViewModel(charactersRepository: charactersRepository)
+        let viewModel = CharactersListViewModel(
+            charactersRepository: charactersRepository,
+            imageDownloader: imageDownloader
+        )
         return CharactersListViewController(viewModel: viewModel)
     }
 

@@ -8,18 +8,28 @@
 import Foundation
 import Combine
 import TaskForceCore
+import ImageDownloader
+
+enum CharactersListSection: Int, CaseIterable {
+    case squad
+    case allCharacters
+}
 
 final class CharactersListViewModel: ObservableObject {
-    @Published public private(set) var isLoading: Bool = false
-    @Published public private(set) var error: Error?
-    @Published public private(set) var characters: [Character] = []
+    @Published private(set) var isLoading: Bool = false
+    @Published private(set) var error: Error?
+    @Published private(set) var squad: [CharactersListCellModel] = []
+    @Published private(set) var allCharacters: [CharactersListCellModel] = []
 
     private let charactersRepository: CharactersRepository
+    private let imageDownloader: ImageDownloader
     private var charactersLatestPagingParameters = PagingParameters()
     private var cancellableBag = Set<AnyCancellable>()
+    private var characters: Set<Character> = .init()
 
-    init(charactersRepository: CharactersRepository) {
+    init(charactersRepository: CharactersRepository, imageDownloader: ImageDownloader) {
         self.charactersRepository = charactersRepository
+        self.imageDownloader = imageDownloader
     }
 
     func obtainInitialData() {
@@ -32,8 +42,7 @@ final class CharactersListViewModel: ObservableObject {
                 guard case let .failure(error) = completion else { return }
                 self?.error = error
             }, receiveValue: { [weak self] value in
-                self?.charactersLatestPagingParameters = value.pagingParameters
-                self?.characters.append(contentsOf: value.results)
+                self?.processNewCharacters(value)
             })
             .store(in: &cancellableBag)
     }
@@ -46,9 +55,28 @@ final class CharactersListViewModel: ObservableObject {
                 guard case let .failure(error) = completion else { return }
                 self?.error = error
             }, receiveValue: { [weak self] value in
-                self?.charactersLatestPagingParameters = value.pagingParameters
-                self?.characters.append(contentsOf: value.results)
+                self?.processNewCharacters(value)
             })
             .store(in: &cancellableBag)
+    }
+
+    private func processNewCharacters(_ newCharacters: PageableResponse<Character>) {
+        charactersLatestPagingParameters = newCharacters.pagingParameters
+        characters.formUnion(newCharacters.results)
+
+        squad.append(contentsOf: newCharacters.squadMembersCellModels(imageDownloader: imageDownloader))
+        allCharacters.append(contentsOf: newCharacters.cellModels(imageDownloader: imageDownloader))
+    }
+}
+
+private extension PageableResponse where Result == Character {
+    func squadMembersCellModels(imageDownloader: ImageDownloader) -> [CharactersListCellModel] {
+        results
+            .filter { $0.isRecruited }
+            .map { CharactersListCellModel(character: $0, imageDownloader: imageDownloader) }
+    }
+
+    func cellModels(imageDownloader: ImageDownloader) -> [CharactersListCellModel] {
+        results.map { CharactersListCellModel(character: $0, imageDownloader: imageDownloader) }
     }
 }
