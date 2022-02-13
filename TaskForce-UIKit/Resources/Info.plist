@@ -26,7 +26,17 @@
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>gateway.marvel.com</key>
-			<string></string>
+            <dict>
+              <key>NSIncludesSubdomains</key>
+              <true/>
+            </dict>
+            <key>i.annihil.us</key>
+            <dict>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+                <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+            </dict>
 		</dict>
 	</dict>
 </dict>

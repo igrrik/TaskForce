@@ -27,6 +27,7 @@
 		90DC454A27B904CA00AF01E7 /* CharactersListTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454927B904CA00AF01E7 /* CharactersListTitleView.swift */; };
 		90DC454C27B9200100AF01E7 /* CharactersListCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454B27B9200100AF01E7 /* CharactersListCellModel.swift */; };
 		90DC454E27B923ED00AF01E7 /* CharactersListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC454D27B923ED00AF01E7 /* CharactersListCell.swift */; };
+		90DC454F27B9525200AF01E7 /* Credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9056548327AF2BF300C4469D /* Credentials.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -328,6 +329,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90DC454F27B9525200AF01E7 /* Credentials.plist in Resources */,
 				9085FBE927A9CF340042AEE2 /* LaunchScreen.storyboard in Resources */,
 				9085FBE627A9CF340042AEE2 /* Assets.xcassets in Resources */,
 			);
