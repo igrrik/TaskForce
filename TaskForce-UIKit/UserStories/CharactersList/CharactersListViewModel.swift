@@ -1,14 +1,15 @@
 //
 //  CharactersListViewModel.swift
-//  
+//  TaskForce-UIKit
 //
 //  Created by Igor Kokoev on 04.02.2022.
 //
 
 import Foundation
 import Combine
+import TaskForceCore
 
-public final class CharactersListViewModel: ObservableObject {
+final class CharactersListViewModel: ObservableObject {
     @Published public private(set) var isLoading: Bool = false
     @Published public private(set) var error: Error?
     @Published public private(set) var characters: [Character] = []
@@ -17,15 +18,17 @@ public final class CharactersListViewModel: ObservableObject {
     private var charactersLatestPagingParameters = PagingParameters()
     private var cancellableBag = Set<AnyCancellable>()
 
-    public init(charactersRepository: CharactersRepository) {
+    init(charactersRepository: CharactersRepository) {
         self.charactersRepository = charactersRepository
     }
 
-    public func obtainInitialData() {
+    func obtainInitialData() {
+        isLoading = true
         charactersRepository
             .obtainCharacters(pagingParams: charactersLatestPagingParameters)
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
+                self?.isLoading = false
                 guard case let .failure(error) = completion else { return }
                 self?.error = error
             }, receiveValue: { [weak self] value in
@@ -35,7 +38,7 @@ public final class CharactersListViewModel: ObservableObject {
             .store(in: &cancellableBag)
     }
 
-    public func obtainMoreData() {
+    func obtainMoreData() {
         charactersRepository
             .obtainCharacters(pagingParams: charactersLatestPagingParameters.nextPageParameters())
             .receive(on: RunLoop.main)

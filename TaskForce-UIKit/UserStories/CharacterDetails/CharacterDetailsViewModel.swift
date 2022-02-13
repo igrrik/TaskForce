@@ -1,14 +1,15 @@
 //
 //  CharacterDetailsViewModel.swift
-//  
+//  TaskForce-UIKit
 //
 //  Created by Igor Kokoev on 07.02.2022.
 //
 
 import UIKit
 import Combine
+import TaskForceCore
 
-public final class CharacterDetailsViewModel: ObservableObject {
+final class CharacterDetailsViewModel: ObservableObject {
     let name: String
     let info: String
     @Published private(set) var image: UIImage?

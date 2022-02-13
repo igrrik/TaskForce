@@ -8,11 +8,11 @@
 import Foundation
 
 public struct PageableResponse<Result>: Equatable where Result: Decodable & Equatable {
+    public let results: [Result]
+    public var pagingParameters: PagingParameters { .init(limit: limit, offset: offset) }
+
     let offset: UInt
     let limit: UInt
-    let results: [Result]
-
-    var pagingParameters: PagingParameters { .init(limit: limit, offset: offset) }
 }
 
 extension PageableResponse {
