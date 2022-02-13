@@ -18,6 +18,8 @@
 		9085FBFE27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBFD27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift */; };
 		9085FC0027A9CF340042AEE2 /* TaskForce_UIKitUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBFF27A9CF340042AEE2 /* TaskForce_UIKitUITestsLaunchTests.swift */; };
 		90DC453A27B5D85300AF01E7 /* TaskForceCore in Frameworks */ = {isa = PBXBuildFile; productRef = 90DC453927B5D85300AF01E7 /* TaskForceCore */; };
+		90DC453C27B8F1D500AF01E7 /* AppModulesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90DC453B27B8F1D500AF01E7 /* AppModulesFactory.swift */; };
+		90DC454027B8F52400AF01E7 /* ImageDownloader in Frameworks */ = {isa = PBXBuildFile; productRef = 90DC453F27B8F52400AF01E7 /* ImageDownloader */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,7 @@
 		9085FBF927A9CF340042AEE2 /* TaskForce-UIKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TaskForce-UIKitUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9085FBFD27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskForce_UIKitUITests.swift; sourceTree = "<group>"; };
 		9085FBFF27A9CF340042AEE2 /* TaskForce_UIKitUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskForce_UIKitUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		90DC453B27B8F1D500AF01E7 /* AppModulesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModulesFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +66,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				90DC453A27B5D85300AF01E7 /* TaskForceCore in Frameworks */,
+				90DC454027B8F52400AF01E7 /* ImageDownloader in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				9085FBDC27A9CF330042AEE2 /* AppDelegate.swift */,
+				90DC453B27B8F1D500AF01E7 /* AppModulesFactory.swift */,
 				9085FBDE27A9CF330042AEE2 /* SceneDelegate.swift */,
 				9056548127AF2BF000C4469D /* CredentialsStore.swift */,
 			);
@@ -212,6 +217,7 @@
 			name = "TaskForce-UIKit";
 			packageProductDependencies = (
 				90DC453927B5D85300AF01E7 /* TaskForceCore */,
+				90DC453F27B8F52400AF01E7 /* ImageDownloader */,
 			);
 			productName = "TaskForce-UIKit";
 			productReference = 9085FBDA27A9CF330042AEE2 /* TaskForce-UIKit.app */;
@@ -331,6 +337,7 @@
 				9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */,
 				9056548227AF2BF000C4469D /* CredentialsStore.swift in Sources */,
 				9085FBDD27A9CF330042AEE2 /* AppDelegate.swift in Sources */,
+				90DC453C27B8F1D500AF01E7 /* AppModulesFactory.swift in Sources */,
 				9085FBDF27A9CF330042AEE2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -674,6 +681,10 @@
 		90DC453927B5D85300AF01E7 /* TaskForceCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TaskForceCore;
+		};
+		90DC453F27B8F52400AF01E7 /* ImageDownloader */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ImageDownloader;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
