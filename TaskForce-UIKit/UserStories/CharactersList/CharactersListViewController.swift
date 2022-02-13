@@ -33,7 +33,7 @@ final class CharactersListViewController: UIViewController {
         configureNavigationBar()
         configureCollectionView()
         applyInitialSnapshots()
-        viewModel.loadMoreCharacters()
+        viewModel.obtainInitialData()
     }
 
     func configureNavigationBar() {

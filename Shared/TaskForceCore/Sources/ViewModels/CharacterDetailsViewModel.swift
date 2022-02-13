@@ -8,19 +8,19 @@
 import UIKit
 import Combine
 
-final class CharacterDetailsViewModel: ObservableObject {
+public final class CharacterDetailsViewModel: ObservableObject {
     let name: String
-    let description: String
+    let info: String
     @Published private(set) var image: UIImage?
     @Published private(set) var isRecruited: Bool
 
     init(character: Character) {
         self.name = character.name
-        self.description = character.description
+        self.info = character.info
         self.isRecruited = character.isRecruited
     }
 
-    func toggleRecruitmentStatus() {
+    public func toggleRecruitmentStatus() {
 
     }
 

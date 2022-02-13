@@ -23,7 +23,7 @@ public final class KingfisherImageDownloader: ImageDownloader {
 
     public func downloadImage(with url: URL) -> AnyPublisher<UIImage, Error> {
         // TODO: Check for deferred
-        ImagePublisher(configuration: .url(url, kingfisher))
+        ImagePublisher(url: url, imageRetriever: kingfisher)
             .eraseToAnyPublisher()
     }
 

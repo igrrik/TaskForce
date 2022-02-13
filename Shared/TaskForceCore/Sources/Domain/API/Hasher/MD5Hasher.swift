@@ -8,7 +8,7 @@
 import Foundation
 import CryptoKit
 
-public final class MD5Hasher: Hasher {
+public final class MD5Hasher: APIHasher {
     public init() {}
 
     public func hash(_ string: String) throws -> String {

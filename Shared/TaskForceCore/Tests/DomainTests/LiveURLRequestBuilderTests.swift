@@ -67,7 +67,7 @@ final class LiveURLRequestBuilderTests: XCTestCase {
     }
 }
 
-private final class StubHasher: Hasher {
+private final class StubHasher: APIHasher {
     var hashFunction: ((String) -> String)!
 
     func hash(_ string: String) throws -> String {
