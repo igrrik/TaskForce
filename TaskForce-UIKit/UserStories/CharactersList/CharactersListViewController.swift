@@ -58,6 +58,14 @@ extension CharactersListViewController: UICollectionViewDelegate {
         }
         viewModel.didSelectCharacter(with: model.characterId)
     }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        if offsetY > contentHeight - scrollView.frame.size.height {
+            viewModel.obtainMoreData()
+        }
+    }
 }
 
 private extension CharactersListViewController {

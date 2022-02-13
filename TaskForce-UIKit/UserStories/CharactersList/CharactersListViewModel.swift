@@ -22,7 +22,7 @@ final class CharactersListViewModel: ObservableObject, Routable {
 
     let routingAction: AnyPublisher<RoutableEvent, Never>
 
-    @Published private(set) var isLoading: Bool = false
+    @Published private(set) var isLoading: Bool = true
     @Published private(set) var error: Error?
     @Published private(set) var squad: [CharactersListCellModel] = []
     @Published private(set) var allCharacters: [CharactersListCellModel] = []
@@ -33,6 +33,7 @@ final class CharactersListViewModel: ObservableObject, Routable {
     private var charactersLatestPagingParameters = PagingParameters()
     private var cancellableBag = Set<AnyCancellable>()
     private var characters: [UInt: Character] = .init()
+    private var isLoadingNextPage: Bool = false
 
     init(charactersRepository: CharactersRepository, imageDownloader: ImageDownloader) {
         self.charactersRepository = charactersRepository
@@ -41,7 +42,6 @@ final class CharactersListViewModel: ObservableObject, Routable {
     }
 
     func obtainInitialData() {
-        isLoading = true
         charactersRepository
             .obtainCharacters(pagingParams: charactersLatestPagingParameters)
             .receive(on: RunLoop.main)
@@ -56,10 +56,13 @@ final class CharactersListViewModel: ObservableObject, Routable {
     }
 
     func obtainMoreData() {
+        guard !isLoadingNextPage, !isLoading else { return }
+        isLoadingNextPage = true
         charactersRepository
             .obtainCharacters(pagingParams: charactersLatestPagingParameters.nextPageParameters())
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
+                self?.isLoadingNextPage = false
                 guard case let .failure(error) = completion else { return }
                 self?.error = error
             }, receiveValue: { [weak self] value in
