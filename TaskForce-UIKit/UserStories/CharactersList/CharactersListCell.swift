@@ -27,9 +27,9 @@ final class CharactersListCell: UICollectionViewListCell {
     override func updateConfiguration(using state: UICellConfigurationState) {
         guard var backgroundConfiguration = backgroundConfiguration else { return }
         if state.isSelected || state.isHighlighted {
-            backgroundConfiguration.backgroundColor = .marvelGreyDark
+            backgroundConfiguration.backgroundColor = Asset.Colors.marvelGreyMedium.color
         } else {
-            backgroundConfiguration.backgroundColor = .marvelGreyLight
+            backgroundConfiguration.backgroundColor = Asset.Colors.marvelGreyLight.color
         }
         self.backgroundConfiguration = backgroundConfiguration
         super.updateConfiguration(using: state)
@@ -47,7 +47,6 @@ final class CharactersListCell: UICollectionViewListCell {
 
         var background = UIBackgroundConfiguration.listPlainCell()
         background.cornerRadius = Constants.cornerRadius
-        background.backgroundColor = .marvelGreyLight
         backgroundConfiguration = background
 
         var options = UICellAccessory.DisclosureIndicatorOptions()

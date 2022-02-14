@@ -10,12 +10,6 @@ import Combine
 import TaskForceCore
 import ImageDownloader
 
-extension UIColor {
-    static let marvelBackground: UIColor = #colorLiteral(red: 0.1774274111, green: 0.1937928796, blue: 0.2227301598, alpha: 0.9)
-    static let marvelGreyLight: UIColor = #colorLiteral(red: 0.2941176471, green: 0.3176470588, blue: 0.368627451, alpha: 1)
-    static let marvelGreyDark: UIColor = #colorLiteral(red: 0.2117647059, green: 0.231372549, blue: 0.2705882353, alpha: 1)
-}
-
 final class CharactersListViewController: UIViewController {
     private let viewModel: CharactersListViewModel
     private var cancellableBag = Set<AnyCancellable>()
@@ -29,6 +23,7 @@ final class CharactersListViewController: UIViewController {
         frame: view.bounds,
         collectionViewLayout: CharactersListSection.makeCompositionalLayout(viewModel: viewModel)
     )
+    private var selectedItemIndexPath: IndexPath?
 
     init(viewModel: CharactersListViewModel) {
         self.viewModel = viewModel
@@ -47,6 +42,12 @@ final class CharactersListViewController: UIViewController {
         applyInitialSnapshots()
         configureBindings()
         viewModel.obtainInitialData()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let indexPath = selectedItemIndexPath else { return }
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 
@@ -73,19 +74,18 @@ private extension CharactersListViewController {
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .marvelBackground
+        appearance.backgroundColor = Asset.Colors.marvelNavigationBarBackground.color
 
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
-        // TODO: swiftgen
-        navigationItem.titleView = UIImageView(image: UIImage(named: "marvel_logo"))
+        navigationItem.titleView = UIImageView(image: Asset.Images.marvelLogo.image)
     }
 
     func configureCollectionView() {
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        collectionView.backgroundColor = .marvelBackground
+        collectionView.backgroundColor = Asset.Colors.marvelBackground.color
         collectionView.delegate = self
         view.addSubview(collectionView)
     }

@@ -9,10 +9,12 @@
 /* Begin PBXBuildFile section */
 		9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */; };
 		9056548227AF2BF000C4469D /* CredentialsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9056548127AF2BF000C4469D /* CredentialsStore.swift */; };
+		905DEA4027BA5D5F0060EFB0 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 905DEA3F27BA5D5F0060EFB0 /* Colors.xcassets */; };
+		905DEA4427BA615E0060EFB0 /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905DEA4327BA615E0060EFB0 /* XCAssets+Generated.swift */; };
 		9085FBDD27A9CF330042AEE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBDC27A9CF330042AEE2 /* AppDelegate.swift */; };
 		9085FBDF27A9CF330042AEE2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBDE27A9CF330042AEE2 /* SceneDelegate.swift */; };
 		9085FBE127A9CF330042AEE2 /* CharactersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBE027A9CF330042AEE2 /* CharactersListViewController.swift */; };
-		9085FBE627A9CF340042AEE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9085FBE527A9CF340042AEE2 /* Assets.xcassets */; };
+		9085FBE627A9CF340042AEE2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9085FBE527A9CF340042AEE2 /* Images.xcassets */; };
 		9085FBE927A9CF340042AEE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9085FBE727A9CF340042AEE2 /* LaunchScreen.storyboard */; };
 		9085FBF427A9CF340042AEE2 /* TaskForce_UIKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBF327A9CF340042AEE2 /* TaskForce_UIKitTests.swift */; };
 		9085FBFE27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBFD27A9CF340042AEE2 /* TaskForce_UIKitUITests.swift */; };
@@ -54,11 +56,13 @@
 		9056548327AF2BF300C4469D /* Credentials.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Credentials.plist; sourceTree = "<group>"; };
 		9056548427B1764400C4469D /* ImageDownloader */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ImageDownloader; sourceTree = "<group>"; };
 		905C9AE827B5D7A700432D12 /* TaskForceCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TaskForceCore; sourceTree = "<group>"; };
+		905DEA3F27BA5D5F0060EFB0 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		905DEA4327BA615E0060EFB0 /* XCAssets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCAssets+Generated.swift"; sourceTree = "<group>"; };
 		9085FBDA27A9CF330042AEE2 /* TaskForce-UIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TaskForce-UIKit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9085FBDC27A9CF330042AEE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9085FBDE27A9CF330042AEE2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		9085FBE027A9CF330042AEE2 /* CharactersListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListViewController.swift; sourceTree = "<group>"; };
-		9085FBE527A9CF340042AEE2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9085FBE527A9CF340042AEE2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9085FBE827A9CF340042AEE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9085FBEA27A9CF340042AEE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9085FBEF27A9CF340042AEE2 /* TaskForce-UIKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TaskForce-UIKitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,7 +126,8 @@
 			children = (
 				9085FBEA27A9CF340042AEE2 /* Info.plist */,
 				9056548327AF2BF300C4469D /* Credentials.plist */,
-				9085FBE527A9CF340042AEE2 /* Assets.xcassets */,
+				9085FBE527A9CF340042AEE2 /* Images.xcassets */,
+				905DEA3F27BA5D5F0060EFB0 /* Colors.xcassets */,
 				9085FBE727A9CF340042AEE2 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
@@ -175,6 +180,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		905DEA4127BA5FB10060EFB0 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				905DEA4327BA615E0060EFB0 /* XCAssets+Generated.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
 		9085FB5F27A6A4F90042AEE2 = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				9056547127AACDBE00C4469D /* App */,
+				905DEA4127BA5FB10060EFB0 /* Generated */,
 				9056547227AACDC900C4469D /* Resources */,
 				9056547327AACDDE00C4469D /* UserStories */,
 			);
@@ -231,6 +245,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9085FC0127A9CF340042AEE2 /* Build configuration list for PBXNativeTarget "TaskForce-UIKit" */;
 			buildPhases = (
+				905DEA4227BA60F00060EFB0 /* Swiftgen */,
 				90DC455527B9B39E00AF01E7 /* Swiftlint */,
 				9085FBD627A9CF330042AEE2 /* Sources */,
 				9085FBD727A9CF330042AEE2 /* Frameworks */,
@@ -334,8 +349,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				90DC454F27B9525200AF01E7 /* Credentials.plist in Resources */,
+				905DEA4027BA5D5F0060EFB0 /* Colors.xcassets in Resources */,
 				9085FBE927A9CF340042AEE2 /* LaunchScreen.storyboard in Resources */,
-				9085FBE627A9CF340042AEE2 /* Assets.xcassets in Resources */,
+				9085FBE627A9CF340042AEE2 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +372,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		905DEA4227BA60F00060EFB0 /* Swiftgen */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Swiftgen;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftgen >/dev/null; then\n  swiftgen\nelse\n  echo \"warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
+		};
 		90DC455527B9B39E00AF01E7 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -372,7 +406,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftlint >/dev/null; then\n  swiftlint --fix && swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "echo $PATH\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -381,6 +415,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				905DEA4427BA615E0060EFB0 /* XCAssets+Generated.swift in Sources */,
 				9085FBE127A9CF330042AEE2 /* CharactersListViewController.swift in Sources */,
 				90DC455427B992BB00AF01E7 /* Routable.swift in Sources */,
 				90DC454C27B9200100AF01E7 /* CharactersListCellModel.swift in Sources */,
@@ -563,6 +598,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9W9U2X842Z;
@@ -592,6 +628,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9W9U2X842Z;

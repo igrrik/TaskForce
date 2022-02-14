@@ -40,7 +40,7 @@ final class CharacterDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .marvelBackground
+        view.backgroundColor = Asset.Colors.marvelBackground.color
         configureLayout()
         configureBindings()
     }
