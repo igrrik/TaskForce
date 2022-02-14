@@ -47,7 +47,9 @@ final class CharactersListViewModel: ObservableObject, Routable {
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
                 self?.isLoading = false
-                guard case let .failure(error) = completion else { return }
+                guard case let .failure(error) = completion else {
+                    return
+                }
                 self?.error = error
             }, receiveValue: { [weak self] value in
                 self?.processNewCharacters(value)
@@ -56,14 +58,18 @@ final class CharactersListViewModel: ObservableObject, Routable {
     }
 
     func obtainMoreData() {
-        guard !isLoadingNextPage, !isLoading else { return }
+        guard !isLoadingNextPage, !isLoading else {
+            return
+        }
         isLoadingNextPage = true
         charactersRepository
             .obtainCharacters(pagingParams: charactersLatestPagingParameters.nextPageParameters())
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
                 self?.isLoadingNextPage = false
-                guard case let .failure(error) = completion else { return }
+                guard case let .failure(error) = completion else {
+                    return
+                }
                 self?.error = error
             }, receiveValue: { [weak self] value in
                 self?.processNewCharacters(value)

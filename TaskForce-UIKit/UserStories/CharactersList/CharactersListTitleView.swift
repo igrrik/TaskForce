@@ -8,7 +8,6 @@
 import UIKit
 
 final class CharactersListTitleView: UICollectionReusableView {
-
     typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<CharactersListTitleView>
 
     static var kind: String { String(describing: self) }

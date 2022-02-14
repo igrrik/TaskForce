@@ -14,7 +14,7 @@ public struct Thumbnail: Decodable, Equatable {
     public func urlForVariant(_ variant: Variant) -> URL {
         let urlString = path + variant.stringValue + "." + self.extension
         guard let url = URL(string: urlString) else {
-            fatalError()
+            fatalError("URL cannot be nil")
         }
         return url
     }

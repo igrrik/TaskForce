@@ -46,11 +46,15 @@ final class CharactersListCellModel: ObservableObject, Hashable {
     }
 
     func downloadImage() {
-        guard image == nil, let imageURL = imageURL else { return }
+        guard image == nil, let imageURL = imageURL else {
+            return
+        }
         imageDownloader
             .downloadImage(with: imageURL)
             .sink { completion in
-                guard case .failure(let error) = completion else { return }
+                guard case .failure(let error) = completion else {
+                    return
+                }
                 assertionFailure("Failed to download image due to: \(error)")
             } receiveValue: { [weak self] image in
                 self?.image = image

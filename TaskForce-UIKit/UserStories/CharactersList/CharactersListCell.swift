@@ -25,7 +25,9 @@ final class CharactersListCell: UICollectionViewListCell {
     }
 
     override func updateConfiguration(using state: UICellConfigurationState) {
-        guard var backgroundConfiguration = backgroundConfiguration else { return }
+        guard var backgroundConfiguration = backgroundConfiguration else {
+            return
+        }
         if state.isSelected || state.isHighlighted {
             backgroundConfiguration.backgroundColor = Asset.Colors.marvelGreyMedium.color
         } else {
@@ -63,7 +65,9 @@ final class CharactersListCell: UICollectionViewListCell {
         }
         model.$image
             .sink { completion in
-                guard case .failure(let error) = completion else { return }
+                guard case .failure(let error) = completion else {
+                    return
+                }
                 assertionFailure("Failed to download image due to: \(error)")
             } receiveValue: { [weak self] image in
                 contentConfiguration.image = image

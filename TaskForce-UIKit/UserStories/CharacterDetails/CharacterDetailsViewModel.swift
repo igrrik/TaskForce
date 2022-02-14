@@ -31,7 +31,7 @@ final class CharacterDetailsViewModel: ObservableObject {
     }
 
     public func toggleRecruitmentStatus() {
-        fatalError()
+        fatalError("not implemented")
     }
 
     private func downloadImage() {
@@ -40,7 +40,9 @@ final class CharacterDetailsViewModel: ObservableObject {
         mediumImage
             .merge(with: fullsizeImage)
             .sink { completion in
-                guard case .failure(let error) = completion else { return }
+                guard case .failure(let error) = completion else {
+                    return
+                }
                 assertionFailure("Failed to obtain image due to error: \(error)")
             } receiveValue: { [weak self] image in
                 self?.image = image

@@ -7,8 +7,8 @@
 
 import XCTest
 
+// swiftlint:disable all
 final class TaskForce_UIKitUITestsLaunchTests: XCTestCase {
-
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }

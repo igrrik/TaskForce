@@ -31,7 +31,7 @@ final class CharactersListViewController: UIViewController {
     }
 
     required init?(coder: NSCoder) {
-        fatalError()
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -46,7 +46,9 @@ final class CharactersListViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let indexPath = selectedItemIndexPath else { return }
+        guard let indexPath = selectedItemIndexPath else {
+            return
+        }
         collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
@@ -71,7 +73,6 @@ extension CharactersListViewController: UICollectionViewDelegate {
 
 private extension CharactersListViewController {
     func configureNavigationBar() {
-
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = Asset.Colors.marvelNavigationBarBackground.color
@@ -184,8 +185,12 @@ private extension DataSource {
         }
 
         dataSource.supplementaryViewProvider = { collectionView, kind, index in
-            guard collectionView.numberOfSections > 1 else { return nil }
-            guard kind == CharactersListTitleView.kind else { fatalError() }
+            guard collectionView.numberOfSections > 1 else {
+                return nil
+            }
+            guard kind == CharactersListTitleView.kind else {
+                fatalError("Unexpected supplementary view kind: \(kind)")
+            }
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
 
@@ -200,7 +205,7 @@ private extension CharactersListSection {
                 return makeAllCharactersLayout()
             }
             guard let section = Self(rawValue: sectionIndex) else {
-                fatalError()
+                fatalError("Unexpected sectionIndex: \(sectionIndex)")
             }
             switch section {
             case .squad:
