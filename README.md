@@ -8,6 +8,13 @@ TaskForce is a small app that gives you opportunity to assemble your own squad o
 
 * Xcode 13+
 * [brew](https://brew.sh)
+* [Marvel API](https://developer.marvel.com/) `private key` and `public key`
+
+### Note
+
+To use the Marvel API you need to sign up for a developer account. Once you sign up you will find your API keys in the Account section.
+
+It's important to add "*" as an Authorized Referrer in the Account section.
 
 ## Installation
 
@@ -15,6 +22,7 @@ TaskForce is a small app that gives you opportunity to assemble your own squad o
 * Open terminal and navigate to project directory
 * Run `chmod +x ./install.sh`
 * Run `./install.sh`
+* Script will ask you to enter your MARVEL API `public key` and `private key`, to add them to `Credentials.plist` which is ignored by `git`
 * Open `TaskForce.xcodeproj`
 * Wait till SPM dependencies are downloaded
 * Run!
