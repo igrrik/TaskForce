@@ -10,7 +10,7 @@ create_credentials_plist() {
         read -p "Enter you MARVEL API private key:" private_key
         read -p "Enter you MARVEL API public key:" public_key
         /usr/libexec/PlistBuddy -c "Add :privateKey string $private_key" $FILE
-        /usr/libexec/PlistBuddy -c "Add :publicKey string $private_key" $FILE
+        /usr/libexec/PlistBuddy -c "Add :publicKey string $public_key" $FILE
     fi
 }
 
@@ -20,5 +20,8 @@ install_tools() {
     brew install swiftlint
 }
 
+echo "–––– Installing tools ––––"
 install_tools
+echo "–––– Creating Credentials Plist ––––"
 create_credentials_plist
+echo "–––– Installation finished ––––"

@@ -4,21 +4,20 @@
 
 TaskForce is a small app that gives you opportunity to assemble your own squad of Marvel Characters.
 
+## Requirements
+
+* Xcode 13
+* [brew](https://brew.sh)
+
 ## Installation
 
 * Clone the project
+* Open terminal and navigate to project directory
+* Run `chmod +x ./install.sh`
+* Run `./install.sh`
+* Open `TaskForce.xcodeproj`
 * Wait till SPM dependencies are downloaded
 * Run!
-
-### Optional
-
-TaskForce uses following tools to improve developer experience, but they aren't needed to run the project: 
-* `Swiftlint` for preserving consistent Code Style 
-* `SwiftGen` automatically generate Swift code for resources of your projects
-
-These tools can be installed via [brew](https://brew.sh):
-* `brew install swiftlint`
-* `brew install swiftgen`
 
 ## Compatibility
 
