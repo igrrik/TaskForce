@@ -274,6 +274,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9085FC0127A9CF340042AEE2 /* Build configuration list for PBXNativeTarget "TaskForce-UIKit" */;
 			buildPhases = (
+				905DEA5527BC52650060EFB0 /* Credentials File Check */,
 				905DEA4227BA60F00060EFB0 /* Swiftgen */,
 				90DC455527B9B39E00AF01E7 /* Swiftlint */,
 				9085FBD627A9CF330042AEE2 /* Sources */,
@@ -420,6 +421,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftgen >/dev/null; then\n  swiftgen\nelse\n  echo \"warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
+		};
+		905DEA5527BC52650060EFB0 /* Credentials File Check */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Credentials File Check";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FILE=TaskForce-UIKit/Resources/Credentials.plist\nif [ ! -f \"$FILE\" ]; then\n    echo \"error: Credentials.plist does not exist.\"\nfi\n";
 		};
 		90DC455527B9B39E00AF01E7 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
