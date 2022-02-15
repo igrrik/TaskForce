@@ -10,26 +10,22 @@ import Combine
 import TaskForceCore
 import ImageDownloader
 
-enum CharactersListSection: Int, CaseIterable {
-    case squad
-    case allCharacters
-}
-
 final class CharactersListViewModel: ObservableObject, Routable {
     enum RoutableEvent {
         case didSelectCharacter(Character)
     }
 
     let routingAction: AnyPublisher<RoutableEvent, Never>
+    let error: AnyPublisher<String, Never>
 
     @Published private(set) var isLoading: Bool = true
-    @Published private(set) var error: Error?
     @Published private(set) var squad: [CharactersListCellModel] = []
     @Published private(set) var allCharacters: [CharactersListCellModel] = []
 
     private let charactersRepository: CharactersRepository
     private let imageDownloader: ImageDownloader
     private let routingSubject = PassthroughSubject<RoutableEvent, Never>()
+    private let errorSubject = PassthroughSubject<String, Never>()
     private var charactersLatestPagingParameters = PagingParameters()
     private var cancellableBag = Set<AnyCancellable>()
     private var characters: [UInt: Character] = .init()
@@ -39,6 +35,7 @@ final class CharactersListViewModel: ObservableObject, Routable {
         self.charactersRepository = charactersRepository
         self.imageDownloader = imageDownloader
         self.routingAction = routingSubject.eraseToAnyPublisher()
+        self.error = errorSubject.eraseToAnyPublisher()
     }
 
     func obtainInitialData() {
@@ -50,7 +47,7 @@ final class CharactersListViewModel: ObservableObject, Routable {
                 guard case let .failure(error) = completion else {
                     return
                 }
-                self?.error = error
+                self?.errorSubject.send(error.localizedDescription)
             }, receiveValue: { [weak self] value in
                 self?.processNewCharacters(value)
             })
@@ -70,7 +67,7 @@ final class CharactersListViewModel: ObservableObject, Routable {
                 guard case let .failure(error) = completion else {
                     return
                 }
-                self?.error = error
+                self?.errorSubject.send(error.localizedDescription)
             }, receiveValue: { [weak self] value in
                 self?.processNewCharacters(value)
             })

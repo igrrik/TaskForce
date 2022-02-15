@@ -118,6 +118,12 @@ private extension CharactersListViewController {
                 self?.dataSource.apply(snapshot, to: .allCharacters, animatingDifferences: true)
             }
             .store(in: &cancellableBag)
+
+        viewModel.error
+            .sink { [weak self] errorString in
+                self?.presentError(errorString)
+            }
+            .store(in: &cancellableBag)
     }
 
     func configureLoadingIndicator() {
@@ -145,6 +151,12 @@ private extension CharactersListViewController {
         dataSource.apply(currentSnapshot, animatingDifferences: true) { [weak self] in
             self?.dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
         }
+    }
+
+    func presentError(_ error: String) {
+        let controller = UIAlertController(title: L10n.error, message: error, preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: L10n.ok, style: .default, handler: nil))
+        present(controller, animated: true)
     }
 }
 
