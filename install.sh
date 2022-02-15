@@ -14,4 +14,11 @@ create_credentials_plist() {
     fi
 }
 
+install_tools() {
+    brew update
+    brew install swiftgen
+    brew install swiftlint
+}
+
+install_tools
 create_credentials_plist
