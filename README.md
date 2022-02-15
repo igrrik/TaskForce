@@ -6,7 +6,7 @@ TaskForce is a small app that gives you opportunity to assemble your own squad o
 
 ## Requirements
 
-* Xcode 13
+* Xcode 13+
 * [brew](https://brew.sh)
 
 ## Installation
