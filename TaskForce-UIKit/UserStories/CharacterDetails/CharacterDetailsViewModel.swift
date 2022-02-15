@@ -31,7 +31,7 @@ final class CharacterDetailsViewModel: ObservableObject {
     }
 
     public func toggleRecruitmentStatus() {
-        fatalError("not implemented")
+        print("Did tap recruit button")
     }
 
     private func downloadImage() {

@@ -36,11 +36,6 @@ public final class LiveAPIClient: APIClient {
     ) {
         let producer: (URLRequest) -> DataTaskPublisher = { request in
             session.dataTaskPublisher(for: request)
-                .handleEvents(receiveOutput: { output in
-                    print(output)
-                }, receiveCompletion: { completion in
-                    print(completion)
-                })
                 .mapError { $0 as Error }
                 .eraseToAnyPublisher()
         }

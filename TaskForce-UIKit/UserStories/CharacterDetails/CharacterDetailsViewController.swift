@@ -10,6 +10,7 @@ import Combine
 
 final class CharacterDetailsViewController: UIViewController {
     private let viewModel: CharacterDetailsViewModel
+    private var cancellableBag = Set<AnyCancellable>()
     private lazy var scrollView = UIScrollView()
     private lazy var imageView = UIImageView()
     private lazy var nameLabel: UILabel = {
@@ -27,7 +28,11 @@ final class CharacterDetailsViewController: UIViewController {
         label.font = .systemFont(ofSize: 17, weight: .regular)
         return label
     }()
-    private var cancellableBag = Set<AnyCancellable>()
+    private lazy var recruitButton: RecruitButton = {
+        let button = RecruitButton(frame: .zero, style: .standard)
+        button.addTarget(self, action: #selector(didTapRecruitButton), for: .touchUpInside)
+        return button
+    }()
 
     init(viewModel: CharacterDetailsViewModel) {
         self.viewModel = viewModel
@@ -48,6 +53,13 @@ final class CharacterDetailsViewController: UIViewController {
     private func configureBindings() {
         viewModel.$image
             .assign(to: \.image, on: imageView)
+            .store(in: &cancellableBag)
+
+        viewModel.$isRecruited
+            .map(String.recruitButtonTitle(isRecruited:))
+            .sink(receiveValue: { [weak self] text in
+                self?.recruitButton.setTitle(text, for: .normal)
+            })
             .store(in: &cancellableBag)
     }
 
@@ -83,9 +95,13 @@ final class CharacterDetailsViewController: UIViewController {
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor)
         ])
 
-        let stackView = UIStackView(arrangedSubviews: [nameLabel, descriptionLabel])
+        NSLayoutConstraint.activate([
+            recruitButton.heightAnchor.constraint(equalToConstant: 48)
+        ])
+
+        let stackView = UIStackView(arrangedSubviews: [nameLabel, recruitButton, descriptionLabel])
         stackView.axis = .vertical
-        stackView.alignment = .leading
+        stackView.alignment = .fill
         stackView.spacing = 16.0
         contentView.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -97,5 +113,16 @@ final class CharacterDetailsViewController: UIViewController {
         ])
 
         descriptionLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 200), for: .vertical)
+    }
+
+    @objc private func didTapRecruitButton() {
+        viewModel.toggleRecruitmentStatus()
+    }
+}
+
+private extension String {
+    static func recruitButtonTitle(isRecruited: Bool) -> String {
+        // TODO: Localizable
+        isRecruited ? "🔥  Fire from Squad" : "💪  Recruit to Squad"
     }
 }
