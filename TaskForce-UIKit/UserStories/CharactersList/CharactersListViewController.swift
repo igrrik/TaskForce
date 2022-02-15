@@ -155,8 +155,7 @@ private extension DataSource {
         let squadCellRegistration = SquadMemberCell.cellRegistration()
         let listCellRegistration = CharactersListCell.cellRegistration()
         let headerRegistration = CharactersListTitleView.headerRegistration { titleView, _, _ in
-            // TODO: Replace with localized string
-            titleView.label.text = "My Squad"
+            titleView.label.text = L10n.charactersListSquadHeaderTitle
         }
 
         let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, model in

@@ -24,7 +24,7 @@ final class CharacterDetailsViewModel: ObservableObject {
     init(character: Character, imageDownloader: ImageDownloader) {
         self.character = character
         self.name = character.name
-        self.info = character.info.isEmpty ? "No description" : character.info // TODO: swiftgen
+        self.info = character.info.isEmpty ? L10n.characterDetailsNoDescription : character.info
         self.isRecruited = character.isRecruited
         self.imageDownloader = imageDownloader
         downloadImage()

@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  TaskForce
+
+  Created by Igor Kokoev on 15.02.2022.
+  
+*/
+
+"error" = "Error";
+"ok" = "OK";
+"characters_list_squad_header_title" = "My Squad";
+"character_details_recruit_button_recruit_title" = "💪  Recruit to Squad";
+"character_details_recruit_button_fire_title" = "🔥  Fire from Squad";
+"character_details_no_description" = "No Description";

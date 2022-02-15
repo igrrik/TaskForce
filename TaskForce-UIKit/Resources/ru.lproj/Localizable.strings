@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  TaskForce
+
+  Created by Igor Kokoev on 15.02.2022.
+  
+*/
+
+"error" = "Ошибка";
+"ok" = "ОК";
+"characters_list_squad_header_title" = "Мой Отряд";
+"character_details_recruit_button_recruit_title" = "💪  Нанять в Отряд";
+"character_details_recruit_button_fire_title" = "🔥  Уволить из Отряда";
+"character_details_no_description" = "Описание отсутствует";

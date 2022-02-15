@@ -122,7 +122,6 @@ final class CharacterDetailsViewController: UIViewController {
 
 private extension String {
     static func recruitButtonTitle(isRecruited: Bool) -> String {
-        // TODO: Localizable
-        isRecruited ? "🔥  Fire from Squad" : "💪  Recruit to Squad"
+        isRecruited ?  L10n.characterDetailsRecruitButtonFireTitle : L10n.characterDetailsRecruitButtonRecruitTitle
     }
 }
