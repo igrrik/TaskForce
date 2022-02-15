@@ -30,6 +30,7 @@ internal enum Asset {
     internal static let marvelRedLight = ColorAsset(name: "MarvelRedLight")
   }
   internal enum Images {
+    internal static let launchScreenNavigationBar = ImageAsset(name: "launch_screen_navigation_bar")
     internal static let marvelLogo = ImageAsset(name: "marvel_logo")
   }
 }

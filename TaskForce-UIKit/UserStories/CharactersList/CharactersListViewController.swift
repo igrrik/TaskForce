@@ -76,6 +76,7 @@ private extension CharactersListViewController {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = Asset.Colors.marvelNavigationBarBackground.color
+        appearance.shadowColor = Asset.Colors.marvelGreyLight.color
 
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.standardAppearance = appearance
