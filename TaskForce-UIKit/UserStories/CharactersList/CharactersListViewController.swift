@@ -59,6 +59,7 @@ extension CharactersListViewController: UICollectionViewDelegate {
             assertionFailure("Failed to obtain CharactersListCellModel")
             return
         }
+        selectedItemIndexPath = indexPath
         viewModel.didSelectCharacter(with: model.characterId)
     }
 
