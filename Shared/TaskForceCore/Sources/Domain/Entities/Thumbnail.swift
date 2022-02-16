@@ -7,16 +7,28 @@
 
 import Foundation
 
-public struct Thumbnail: Decodable, Equatable {
-    let path: String
-    let `extension`: String
+public struct Thumbnail: Equatable {
+    public let path: String
+    public let fileExtension: String
+
+    public init(path: String, fileExtension: String) {
+        self.path = path
+        self.fileExtension = fileExtension
+    }
 
     public func urlForVariant(_ variant: Variant) -> URL {
-        let urlString = path + variant.stringValue + "." + self.extension
+        let urlString = path + variant.stringValue + "." + fileExtension
         guard let url = URL(string: urlString) else {
             fatalError("URL cannot be nil")
         }
         return url
+    }
+}
+
+extension Thumbnail: Decodable {
+    private enum CodingKeys: String, CodingKey {
+        case path
+        case fileExtension = "extension"
     }
 }
 

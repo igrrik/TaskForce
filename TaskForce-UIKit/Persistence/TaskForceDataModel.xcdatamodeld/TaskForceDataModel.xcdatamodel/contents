@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="20G314" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Character" representedClassName="CharacterMO" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="info" optional="YES" attributeType="String"/>
+        <attribute name="isRecruited" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="thumbnail" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Thumbnail" inverseName="character" inverseEntity="Thumbnail"/>
+    </entity>
+    <entity name="Thumbnail" representedClassName="ThumbnailMO" syncable="YES" codeGenerationType="class">
+        <attribute name="fileExtension" optional="YES" attributeType="String"/>
+        <attribute name="path" optional="YES" attributeType="String"/>
+        <relationship name="character" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="Character" inverseName="thumbnail" inverseEntity="Character"/>
+    </entity>
+    <elements>
+        <element name="Character" positionX="-45" positionY="0" width="128" height="118"/>
+        <element name="Thumbnail" positionX="136.80078125" positionY="149.78515625" width="128" height="88"/>
+    </elements>
+</model>

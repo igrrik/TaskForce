@@ -13,7 +13,11 @@ final class RecruitButton: UIButton {
         case outlined
     }
 
-    private let style: Style
+    var style: Style {
+        didSet {
+            updateStyle(style)
+        }
+    }
 
     override var isHighlighted: Bool {
         didSet {
@@ -36,6 +40,11 @@ final class RecruitButton: UIButton {
         layer.cornerRadius = Constants.cornerRadius
         titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         titleLabel?.textColor = .white
+        updateStyle(style)
+    }
+
+    private func updateStyle(_ style: Style) {
+        resetStyle()
 
         switch style {
         case .standard:
@@ -47,6 +56,16 @@ final class RecruitButton: UIButton {
         }
 
         updateColorConfiguration()
+    }
+
+    private func resetStyle() {
+        backgroundColor = nil
+        layer.shadowColor = nil
+        layer.shadowRadius = 0
+        layer.shadowOffset = .zero
+        layer.shadowOpacity = 0
+        layer.borderWidth = 0
+        layer.borderColor = nil
     }
 
     private func updateColorConfiguration() {

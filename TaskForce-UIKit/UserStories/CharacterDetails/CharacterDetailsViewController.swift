@@ -61,6 +61,11 @@ final class CharacterDetailsViewController: UIViewController {
                 self?.recruitButton.setTitle(text, for: .normal)
             })
             .store(in: &cancellableBag)
+
+        viewModel.$isRecruited
+            .map(RecruitButton.Style.styleForRecruitmentStatus)
+            .assign(to: \.style, on: recruitButton)
+            .store(in: &cancellableBag)
     }
 
     private func configureLayout() {
@@ -123,5 +128,11 @@ final class CharacterDetailsViewController: UIViewController {
 private extension String {
     static func recruitButtonTitle(isRecruited: Bool) -> String {
         isRecruited ?  L10n.characterDetailsRecruitButtonFireTitle : L10n.characterDetailsRecruitButtonRecruitTitle
+    }
+}
+
+private extension RecruitButton.Style {
+    static func styleForRecruitmentStatus(_ isRecruited: Bool) -> Self {
+        isRecruited ? .outlined : .standard
     }
 }

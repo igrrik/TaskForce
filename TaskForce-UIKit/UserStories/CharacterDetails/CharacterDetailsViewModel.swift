@@ -27,11 +27,17 @@ final class CharacterDetailsViewModel: ObservableObject {
         self.info = character.info.isEmpty ? L10n.characterDetailsNoDescription : character.info
         self.isRecruited = character.isRecruited
         self.imageDownloader = imageDownloader
+        checkRecruitmentState()
         downloadImage()
     }
 
     public func toggleRecruitmentStatus() {
-        print("Did tap recruit button")
+        if isRecruited {
+            PersistenceController.shared.deleteCharacter(with: character.id)
+        } else {
+            PersistenceController.shared.add(character: character)
+        }
+        isRecruited.toggle()
     }
 
     private func downloadImage() {
@@ -48,5 +54,11 @@ final class CharacterDetailsViewModel: ObservableObject {
                 self?.image = image
             }
             .store(in: &cancellableBag)
+    }
+
+    private func checkRecruitmentState() {
+        let characters = PersistenceController.shared.obtainRecruitedCharacters()
+        let recruited = characters.contains(where: { $0.id == character.id })
+        self.isRecruited = recruited
     }
 }
