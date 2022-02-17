@@ -81,7 +81,7 @@ final class PersistenceController {
 }
 
 private extension Character {
-    init?(characterMO: CharacterMO) {
+    convenience init?(characterMO: CharacterMO) {
         guard
             let name = characterMO.name,
             let info = characterMO.info,

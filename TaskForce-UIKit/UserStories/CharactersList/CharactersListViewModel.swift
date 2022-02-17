@@ -30,6 +30,7 @@ final class CharactersListViewModel: ObservableObject, Routable {
     private var cancellableBag = Set<AnyCancellable>()
     private var characters: [UInt: Character] = .init()
     private var isLoadingNextPage: Bool = false
+    private var squadCancellable: AnyCancellable?
 
     init(charactersRepository: CharactersRepository, imageDownloader: ImageDownloader) {
         self.charactersRepository = charactersRepository
@@ -38,20 +39,13 @@ final class CharactersListViewModel: ObservableObject, Routable {
         self.error = errorSubject.eraseToAnyPublisher()
     }
 
+    deinit {
+        squadCancellable?.cancel()
+    }
+
     func obtainInitialData() {
-        charactersRepository
-            .obtainCharacters(pagingParams: charactersLatestPagingParameters)
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { [weak self] completion in
-                self?.isLoading = false
-                guard case let .failure(error) = completion else {
-                    return
-                }
-                self?.errorSubject.send(error.localizedDescription)
-            }, receiveValue: { [weak self] value in
-                self?.processNewCharacters(value)
-            })
-            .store(in: &cancellableBag)
+        observeSquad()
+        obtainFirstBunchOfCharacters()
     }
 
     func obtainMoreData() {
@@ -68,8 +62,8 @@ final class CharactersListViewModel: ObservableObject, Routable {
                     return
                 }
                 self?.errorSubject.send(error.localizedDescription)
-            }, receiveValue: { [weak self] value in
-                self?.processNewCharacters(value)
+            }, receiveValue: { [weak self] response in
+                self?.process(response)
             })
             .store(in: &cancellableBag)
     }
@@ -82,25 +76,49 @@ final class CharactersListViewModel: ObservableObject, Routable {
         routingSubject.send(.didSelectCharacter(character))
     }
 
-    private func processNewCharacters(_ newCharacters: PageableResponse<Character>) {
-        charactersLatestPagingParameters = newCharacters.pagingParameters
-        newCharacters.results.forEach { character in
+    private func obtainFirstBunchOfCharacters() {
+        charactersRepository
+            .obtainCharacters(pagingParams: charactersLatestPagingParameters)
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                self?.isLoading = false
+                guard case let .failure(error) = completion else {
+                    return
+                }
+                self?.errorSubject.send(error.localizedDescription)
+            }, receiveValue: { [weak self] response in
+                self?.process(response)
+            })
+            .store(in: &cancellableBag)
+    }
+
+    private func observeSquad() {
+        charactersRepository
+            .observeSquadMembers()
+            .map { [weak self] characters in
+                guard let imageDownloader = self?.imageDownloader else {
+                    assertionFailure("Self shouldn't be nil")
+                    return [CharactersListCellModel]()
+                }
+                return characters
+                    .sorted(by: { $0.name < $1.name })
+                    .map { CharactersListCellModel(character: $0, imageDownloader: imageDownloader) }
+            }
+            .sink { [weak self] squad in
+                self?.squad = squad
+            }
+            .store(in: &cancellableBag)
+    }
+
+    private func process(_ response: PageableResponse<Character>) {
+        charactersLatestPagingParameters = response.pagingParameters
+        let newCharacters = response.results
+
+        newCharacters.forEach { character in
             characters[character.id] = character
         }
 
-        squad.append(contentsOf: newCharacters.squadMembersCellModels(imageDownloader: imageDownloader))
-        allCharacters.append(contentsOf: newCharacters.cellModels(imageDownloader: imageDownloader))
-    }
-}
-
-private extension PageableResponse where Result == Character {
-    func squadMembersCellModels(imageDownloader: ImageDownloader) -> [CharactersListCellModel] {
-        results
-            .prefix(1)
-            .map { CharactersListCellModel(character: $0, imageDownloader: imageDownloader) }
-    }
-
-    func cellModels(imageDownloader: ImageDownloader) -> [CharactersListCellModel] {
-        results.map { CharactersListCellModel(character: $0, imageDownloader: imageDownloader) }
+        let cellModels = newCharacters.map { CharactersListCellModel(character: $0, imageDownloader: imageDownloader) }
+        allCharacters.append(contentsOf: cellModels)
     }
 }

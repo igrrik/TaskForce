@@ -18,7 +18,7 @@ final class LiveCharactersRepositoryTests: XCTestCase {
         try super.setUpWithError()
         apiClient = .init()
         cancellableBag = .init()
-        sut = LiveCharactersRepository(apiClient: apiClient)
+        sut = LiveCharactersRepository(apiClient: apiClient, squadManager: InMemorySquadManager())
     }
 
     func testThatPageableResponseIsReturnedWhenCharactersAreObtained() {
@@ -31,9 +31,9 @@ final class LiveCharactersRepositoryTests: XCTestCase {
         apiClient.addResponse(for: ObtainCharactersRequest.self, result: .success(givenResponse))
 
         let expectedResponse = PageableResponse<Character>(
+            results: [.adamWarlock, .agathaHarkness],
             offset: 0,
-            limit: 20,
-            results: [.adamWarlock, .agathaHarkness]
+            limit: 20
         )
         var receivedResponse: PageableResponse<Character>!
 

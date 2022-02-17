@@ -158,13 +158,13 @@ extension Character {
     static let adamWarlock = Character(
         id: 1010354,
         name: "Adam Warlock",
-        description: "Adam Warlock is an artificially created human who was born in a cocoon at a scientific complex called The Beehive.",
-        thumbnail: .init(path: "http://i.annihil.us/u/prod/marvel/i/mg/a/f0/5202887448860", extension: "jpg")
+        info: "Adam Warlock is an artificially created human who was born in a cocoon at a scientific complex called The Beehive.",
+        thumbnail: .init(path: "http://i.annihil.us/u/prod/marvel/i/mg/a/f0/5202887448860", fileExtension: "jpg")
     )
     static let agathaHarkness = Character(
         id: 1012717,
         name: "Agatha Harkness",
-        description: "",
-        thumbnail: .init(path: "http://i.annihil.us/u/prod/marvel/i/mg/c/a0/4ce5a9bf70e19", extension: "jpg")
+        info: "",
+        thumbnail: .init(path: "http://i.annihil.us/u/prod/marvel/i/mg/c/a0/4ce5a9bf70e19", fileExtension: "jpg")
     )
 }

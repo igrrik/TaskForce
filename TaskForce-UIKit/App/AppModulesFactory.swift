@@ -24,7 +24,8 @@ public final class AppModulesFactory {
         decoder: JSONDecoder(),
         delegateQueue: .main
     )
-    private lazy var charactersRepository = LiveCharactersRepository(apiClient: apiClient)
+    private lazy var squadManager = InMemorySquadManager()
+    private lazy var charactersRepository = LiveCharactersRepository(apiClient: apiClient, squadManager: squadManager)
     private lazy var imageDownloader = KingfisherImageDownloader()
 
     func makeCharactersListModule() -> (CharactersListViewModel, UIViewController) {
@@ -37,7 +38,11 @@ public final class AppModulesFactory {
     }
 
     func makeCharacterDetailsModule(_ character: Character) -> (CharacterDetailsViewModel, UIViewController) {
-        let viewModel = CharacterDetailsViewModel(character: character, imageDownloader: imageDownloader)
+        let viewModel = CharacterDetailsViewModel(
+            character: character,
+            squadManager: squadManager,
+            imageDownloader: imageDownloader
+        )
         let controller = CharacterDetailsViewController(viewModel: viewModel)
         return (viewModel, controller)
     }

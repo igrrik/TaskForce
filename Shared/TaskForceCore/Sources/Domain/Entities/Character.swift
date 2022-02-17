@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct Character: Hashable {
+public final class Character: Hashable {
     public let id: UInt
     public let name: String
     public let info: String
     public let thumbnail: Thumbnail
-    public let isRecruited: Bool = false
+    public var isRecruited: Bool = false
 
     public init(id: UInt, name: String, info: String, thumbnail: Thumbnail) {
         self.id = id

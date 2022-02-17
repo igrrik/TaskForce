@@ -18,24 +18,25 @@ final class CharacterDetailsViewModel: ObservableObject {
     @Published private(set) var isRecruited: Bool
 
     private let character: Character
+    private let squadManager: SquadManager
     private let imageDownloader: ImageDownloader
     private var cancellableBag = Set<AnyCancellable>()
 
-    init(character: Character, imageDownloader: ImageDownloader) {
+    init(character: Character, squadManager: SquadManager, imageDownloader: ImageDownloader) {
         self.character = character
         self.name = character.name
         self.info = character.info.isEmpty ? L10n.characterDetailsNoDescription : character.info
         self.isRecruited = character.isRecruited
+        self.squadManager = squadManager
         self.imageDownloader = imageDownloader
-        checkRecruitmentState()
         downloadImage()
     }
 
     public func toggleRecruitmentStatus() {
         if isRecruited {
-            PersistenceController.shared.deleteCharacter(with: character.id)
+            squadManager.fire(character)
         } else {
-            PersistenceController.shared.add(character: character)
+            squadManager.recruit(character)
         }
         isRecruited.toggle()
     }
@@ -54,11 +55,5 @@ final class CharacterDetailsViewModel: ObservableObject {
                 self?.image = image
             }
             .store(in: &cancellableBag)
-    }
-
-    private func checkRecruitmentState() {
-        let characters = PersistenceController.shared.obtainRecruitedCharacters()
-        let recruited = characters.contains(where: { $0.id == character.id })
-        self.isRecruited = recruited
     }
 }
