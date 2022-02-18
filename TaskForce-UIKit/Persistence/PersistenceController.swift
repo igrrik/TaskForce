@@ -10,34 +10,6 @@ import CoreData
 import TaskForceCore
 import Combine
 
-protocol ManagedObject: NSManagedObject {
-    static var entityName: String { get }
-
-    init<T: ManagedObjectContext>(managedObjectContext: T)
-}
-
-extension ManagedObject {
-    static var entityName: String {
-        guard let name = entity().name else {
-            assertionFailure("Entity without name: \(entity())")
-            return ""
-        }
-        return name
-    }
-
-    init<T: ManagedObjectContext>(managedObjectContext: T) where T == NSManagedObjectContext {
-
-    }
-}
-
-//extension CharacterMO: ManagedObject {
-//
-//}
-
-protocol ManagedObjectContext {}
-
-extension NSManagedObjectContext: ManagedObjectContext {}
-
 extension Character: Persistable {
     typealias PersistableObject = CharacterMO
 
@@ -54,7 +26,7 @@ extension Character: Persistable {
     }
 
     @discardableResult
-    func makePersistableObject(in context: ManagedObjectContext) -> PersistableObject {
+    func makePersistableObject(in context: NSManagedObjectContext) -> PersistableObject {
         let thumbnailMO = ThumbnailMO(context: context)
         thumbnailMO.path = thumbnail.path
         thumbnailMO.fileExtension = thumbnail.fileExtension
@@ -65,6 +37,8 @@ extension Character: Persistable {
         characterMO.info = info
         characterMO.isRecruited = true
         characterMO.thumbnail = thumbnailMO
+
+        return characterMO
     }
 
     func identifyingPredicate() -> NSPredicate {
@@ -73,14 +47,38 @@ extension Character: Persistable {
 }
 
 protocol Persistable {
-    associatedtype PersistableObject: ManagedObject
+    associatedtype PersistableObject: NSManagedObject
 
     init?(object: PersistableObject)
 
     @discardableResult
-    func makePersistableObject(in context: ManagedObjectContext) -> PersistableObject
+    func makePersistableObject(in context: NSManagedObjectContext) -> PersistableObject
 
     func identifyingPredicate() -> NSPredicate
+}
+
+private extension Persistable {
+    static func fetchRequest() throws -> NSFetchRequest<PersistableObject> {
+        let entity = PersistableObject.entity()
+        guard let entityName = entity.name else {
+            throw CoreDataPersistenceController.Failure.failedToObtainEntityName(entity)
+        }
+        return NSFetchRequest<PersistableObject>(entityName: entityName)
+    }
+}
+
+class ManagedObjectContext: NSManagedObjectContext {
+    func obtain<T: NSFetchRequestResult>(_ request: NSFetchRequest<T>) throws -> [T] {
+        try fetch(request)
+    }
+}
+
+class PersistentContainer: NSPersistentContainer {
+    func performBackgroundWork(_ work: @escaping (ManagedObjectContext) -> Void) {
+        performBackgroundTask { context in
+            work(context as! ManagedObjectContext)
+        }
+    }
 }
 
 protocol PersistenceController {
@@ -103,6 +101,7 @@ final class CoreDataPersistenceController: PersistenceController {
 
     enum Failure: Error {
         case failedToFindObjectWithPredicate(NSPredicate)
+        case failedToObtainEntityName(NSEntityDescription)
     }
 
     init(delegateQueue: DispatchQueue) {
@@ -113,8 +112,8 @@ final class CoreDataPersistenceController: PersistenceController {
         Deferred {
             Future<[T], Error> { subscriber in
                 self.persistentContainer.performBackgroundTask { context in
-                    let fetchRequest = NSFetchRequest<T.PersistableObject>(entityName: T.PersistableObject.entityName)
                     do {
+                        let fetchRequest = try T.fetchRequest()
                         let items = try context.fetch(fetchRequest)
                         let objects = items.compactMap(T.init(object:))
                         subscriber(.success(objects))
@@ -153,11 +152,12 @@ final class CoreDataPersistenceController: PersistenceController {
             let subject = PassthroughSubject<Never, Error>()
 
             self.persistentContainer.performBackgroundTask { context in
-                let fetchRequest = NSFetchRequest<T.PersistableObject>(entityName: T.PersistableObject.entityName)
-                let predicate = item.identifyingPredicate()
-                fetchRequest.fetchLimit = 1
-                fetchRequest.predicate = predicate
                 do {
+                    let fetchRequest = try T.fetchRequest()
+                    let predicate = item.identifyingPredicate()
+                    fetchRequest.fetchLimit = 1
+                    fetchRequest.predicate = predicate
+
                     guard let object = try context.fetch(fetchRequest).first else {
                         subject.send(completion: .failure(Failure.failedToFindObjectWithPredicate(predicate)))
                         return
