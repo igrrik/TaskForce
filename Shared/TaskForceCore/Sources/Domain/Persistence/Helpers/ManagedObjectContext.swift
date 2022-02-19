@@ -8,31 +8,16 @@
 import Foundation
 import CoreData
 
-// swiftlint:disable:next final_class
-open class ManagedObjectContext: NSManagedObjectContext {
-    func obtain<T: NSFetchRequestResult>(_ request: NSFetchRequest<T>) throws -> [T] {
-        try fetch(request)
-    }
+public protocol ManagedObjectContext {
+    var hasChanges: Bool { get }
+
+    func obtain<T: NSFetchRequestResult>(_ request: NSFetchRequest<T>) throws -> [T]
+    func delete(_ object: NSManagedObject)
+    func save() throws
 }
 
-final class MockManagedObjectContext: ManagedObjectContext {
-    var obtainResult: Result<Any, Error>!
-
-    override func obtain<T: NSFetchRequestResult>(_ request: NSFetchRequest<T>) throws -> [T] {
-        switch obtainResult {
-        case .success(let output):
-            // swiftlint:disable:next force_cast
-            return output as! [T]
-        case .failure(let error):
-            throw error
-        case .none:
-            fatalError("obtainResult shouldn't be nil")
-        }
-    }
-
-    override func delete(_ object: NSManagedObject) {
-    }
-
-    override func save() throws {
+extension NSManagedObjectContext: ManagedObjectContext {
+    public func obtain<T: NSFetchRequestResult>(_ request: NSFetchRequest<T>) throws -> [T] {
+        try fetch(request)
     }
 }

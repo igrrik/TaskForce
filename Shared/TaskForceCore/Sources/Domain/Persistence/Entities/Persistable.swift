@@ -14,7 +14,7 @@ public protocol Persistable {
     init?(object: PersistableObject)
 
     @discardableResult
-    func makePersistableObject(in context: NSManagedObjectContext) -> PersistableObject
+    func makePersistableObject(in context: ManagedObjectContext) -> PersistableObject?
 
     func identifyingPredicate() -> NSPredicate
 }

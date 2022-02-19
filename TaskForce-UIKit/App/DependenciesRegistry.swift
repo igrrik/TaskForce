@@ -37,15 +37,7 @@ final class DependenciesRegistry {
         container: persistentContainer,
         delegateQueue: .main
     )
-    private lazy var persistentContainer: PersistentContainer = {
-        let container = PersistentContainer()
-        container.loadPersistentStores { _, error in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
-        return container
-    }()
+    private lazy var persistentContainer = CoreDataPersistentContainer()
 }
 
 private extension Date {

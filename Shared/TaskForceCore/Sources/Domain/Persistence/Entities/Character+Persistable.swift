@@ -24,7 +24,10 @@ extension Character: Persistable {
     }
 
     @discardableResult
-    public func makePersistableObject(in context: NSManagedObjectContext) -> PersistableObject {
+    public func makePersistableObject(in context: ManagedObjectContext) -> PersistableObject? {
+        guard let context = context as? NSManagedObjectContext else {
+            return nil
+        }
         let thumbnailMO = ThumbnailMO(context: context)
         thumbnailMO.path = thumbnail.path
         thumbnailMO.fileExtension = thumbnail.fileExtension
