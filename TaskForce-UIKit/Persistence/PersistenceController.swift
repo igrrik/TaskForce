@@ -73,11 +73,40 @@ class ManagedObjectContext: NSManagedObjectContext {
     }
 }
 
+final class MockManagedObjectContext: ManagedObjectContext {
+    var obtainResult: Result<Any, Error>!
+
+    override func obtain<T: NSFetchRequestResult>(_ request: NSFetchRequest<T>) throws -> [T] {
+        switch obtainResult {
+        case .success(let output):
+            return output as! [T]
+        case .failure(let error):
+            throw error
+        case .none:
+            fatalError("obtainResult shouldn't be nil")
+        }
+    }
+
+    override func delete(_ object: NSManagedObject) {
+
+    }
+
+    override func save() throws {
+
+    }
+}
+
 class PersistentContainer: NSPersistentContainer {
     func performBackgroundWork(_ work: @escaping (ManagedObjectContext) -> Void) {
         performBackgroundTask { context in
             work(context as! ManagedObjectContext)
         }
+    }
+}
+
+final class MockPersistentContainer: PersistentContainer {
+    override func performBackgroundWork(_ work: @escaping (ManagedObjectContext) -> Void) {
+
     }
 }
 
@@ -89,32 +118,32 @@ protocol PersistenceController {
 
 final class CoreDataPersistenceController: PersistenceController {
     private let delegateQueue: DispatchQueue
-    private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "TaskForceDataModel")
-        container.loadPersistentStores { _, error in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
-        return container
-    }()
+    private let persistentContainer: PersistentContainer
+
+    init(container: PersistentContainer, delegateQueue: DispatchQueue) {
+        self.persistentContainer = container
+        self.delegateQueue = delegateQueue
+//        let container = NSPersistentContainer(name: "TaskForceDataModel")
+//        container.loadPersistentStores { _, error in
+//            if let error = error as NSError? {
+//                fatalError("Unresolved error \(error), \(error.userInfo)")
+//            }
+//        }
+//        return container
+    }
 
     enum Failure: Error {
         case failedToFindObjectWithPredicate(NSPredicate)
         case failedToObtainEntityName(NSEntityDescription)
     }
 
-    init(delegateQueue: DispatchQueue) {
-        self.delegateQueue = delegateQueue
-    }
-
     func obtainItems<T: Persistable>(ofType: T.Type) -> AnyPublisher<[T], Error> {
         Deferred {
             Future<[T], Error> { subscriber in
-                self.persistentContainer.performBackgroundTask { context in
+                self.persistentContainer.performBackgroundWork { context in
                     do {
                         let fetchRequest = try T.fetchRequest()
-                        let items = try context.fetch(fetchRequest)
+                        let items = try context.obtain(fetchRequest)
                         let objects = items.compactMap(T.init(object:))
                         subscriber(.success(objects))
                     } catch {
@@ -131,7 +160,7 @@ final class CoreDataPersistenceController: PersistenceController {
         Deferred { () -> PassthroughSubject<Never, Error> in
             let subject = PassthroughSubject<Never, Error>()
 
-            self.persistentContainer.performBackgroundTask { context in
+            self.persistentContainer.performBackgroundWork { context in
                 do {
                     item.makePersistableObject(in: context)
                     try self.save(context: context)
@@ -151,14 +180,14 @@ final class CoreDataPersistenceController: PersistenceController {
         Deferred { () -> PassthroughSubject<Never, Error> in
             let subject = PassthroughSubject<Never, Error>()
 
-            self.persistentContainer.performBackgroundTask { context in
+            self.persistentContainer.performBackgroundWork { context in
                 do {
                     let fetchRequest = try T.fetchRequest()
                     let predicate = item.identifyingPredicate()
                     fetchRequest.fetchLimit = 1
                     fetchRequest.predicate = predicate
 
-                    guard let object = try context.fetch(fetchRequest).first else {
+                    guard let object = try context.obtain(fetchRequest).first else {
                         subject.send(completion: .failure(Failure.failedToFindObjectWithPredicate(predicate)))
                         return
                     }
