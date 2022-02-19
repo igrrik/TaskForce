@@ -10,7 +10,7 @@ import Combine
 
 public final class InMemorySquadManager: SquadManager {
     public let squadMembers: AnyPublisher<Set<Character>, Never>
-    
+
     private let squadMembersSubject: CurrentValueSubject<Set<Character>, Never>
 
     public init(squad: Set<Character>) {

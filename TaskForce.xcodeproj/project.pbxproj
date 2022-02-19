@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9036D3B327C1317C00015E6A /* DependenciesRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9036D3B227C1317C00015E6A /* DependenciesRegistry.swift */; };
 		9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */; };
 		9056548227AF2BF000C4469D /* CredentialsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9056548127AF2BF000C4469D /* CredentialsStore.swift */; };
 		905DEA4027BA5D5F0060EFB0 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 905DEA3F27BA5D5F0060EFB0 /* Colors.xcassets */; };
@@ -55,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9036D3B227C1317C00015E6A /* DependenciesRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependenciesRegistry.swift; sourceTree = "<group>"; };
 		9056547627AB3FF200C4469D /* CharacterDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewController.swift; sourceTree = "<group>"; };
 		9056548127AF2BF000C4469D /* CredentialsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsStore.swift; sourceTree = "<group>"; };
 		9056548327AF2BF300C4469D /* Credentials.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Credentials.plist; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				9085FBDE27A9CF330042AEE2 /* SceneDelegate.swift */,
 				9056548127AF2BF000C4469D /* CredentialsStore.swift */,
 				90DC455327B992BB00AF01E7 /* Routable.swift */,
+				9036D3B227C1317C00015E6A /* DependenciesRegistry.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -468,6 +471,7 @@
 				905DEA4427BA615E0060EFB0 /* XCAssets+Generated.swift in Sources */,
 				9085FBE127A9CF330042AEE2 /* CharactersListViewController.swift in Sources */,
 				90DC455427B992BB00AF01E7 /* Routable.swift in Sources */,
+				9036D3B327C1317C00015E6A /* DependenciesRegistry.swift in Sources */,
 				90DC454C27B9200100AF01E7 /* CharactersListCellModel.swift in Sources */,
 				90DC454427B8FA4700AF01E7 /* CharacterDetailsViewModel.swift in Sources */,
 				9056547727AB3FF200C4469D /* CharacterDetailsViewController.swift in Sources */,

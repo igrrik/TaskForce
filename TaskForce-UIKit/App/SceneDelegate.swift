@@ -23,7 +23,6 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         let window = UIWindow(windowScene: windowScene)
-        // TODO: move to coordinator
         let appFlowController = AppFlowController(appModulesFactory: .init())
         window.rootViewController = appFlowController
         appFlowController.start()

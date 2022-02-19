@@ -76,6 +76,5 @@ public final class PersistentSquadManager: SquadManager {
                 self?.squadMembersSubject.send(characters)
             }
             .store(in: &cancellableBag)
-
     }
 }

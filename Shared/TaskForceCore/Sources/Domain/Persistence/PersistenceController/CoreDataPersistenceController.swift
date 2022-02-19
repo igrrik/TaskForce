@@ -16,13 +16,6 @@ public final class CoreDataPersistenceController: PersistenceController {
     public init(container: PersistentContainer, delegateQueue: DispatchQueue) {
         self.persistentContainer = container
         self.delegateQueue = delegateQueue
-//        let container = NSPersistentContainer(name: "TaskForceDataModel")
-//        container.loadPersistentStores { _, error in
-//            if let error = error as NSError? {
-//                fatalError("Unresolved error \(error), \(error.userInfo)")
-//            }
-//        }
-//        return container
     }
 
     enum Failure: Error {
