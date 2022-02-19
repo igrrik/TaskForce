@@ -15,8 +15,6 @@
 		905DEA4B27BBC76E0060EFB0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 905DEA4D27BBC76E0060EFB0 /* Localizable.strings */; };
 		905DEA5027BBC8D20060EFB0 /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905DEA4F27BBC8D20060EFB0 /* Strings+Generated.swift */; };
 		905DEA5227BBD6420060EFB0 /* CharactersListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905DEA5127BBD6420060EFB0 /* CharactersListSection.swift */; };
-		905DEA5C27BDA4D30060EFB0 /* TaskForceDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 905DEA5A27BDA4D30060EFB0 /* TaskForceDataModel.xcdatamodeld */; };
-		905DEA5E27BDA8690060EFB0 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905DEA5D27BDA8690060EFB0 /* PersistenceController.swift */; };
 		9085FBDD27A9CF330042AEE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBDC27A9CF330042AEE2 /* AppDelegate.swift */; };
 		9085FBDF27A9CF330042AEE2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBDE27A9CF330042AEE2 /* SceneDelegate.swift */; };
 		9085FBE127A9CF330042AEE2 /* CharactersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085FBE027A9CF330042AEE2 /* CharactersListViewController.swift */; };
@@ -69,8 +67,6 @@
 		905DEA4E27BBC79B0060EFB0 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		905DEA4F27BBC8D20060EFB0 /* Strings+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
 		905DEA5127BBD6420060EFB0 /* CharactersListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListSection.swift; sourceTree = "<group>"; };
-		905DEA5B27BDA4D30060EFB0 /* TaskForceDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaskForceDataModel.xcdatamodel; sourceTree = "<group>"; };
-		905DEA5D27BDA8690060EFB0 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		9085FBDA27A9CF330042AEE2 /* TaskForce-UIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TaskForce-UIKit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9085FBDC27A9CF330042AEE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9085FBDE27A9CF330042AEE2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -221,15 +217,6 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		905DEA5627BDA4260060EFB0 /* Persistence */ = {
-			isa = PBXGroup;
-			children = (
-				905DEA5A27BDA4D30060EFB0 /* TaskForceDataModel.xcdatamodeld */,
-				905DEA5D27BDA8690060EFB0 /* PersistenceController.swift */,
-			);
-			path = Persistence;
-			sourceTree = "<group>";
-		};
 		9085FB5F27A6A4F90042AEE2 = {
 			isa = PBXGroup;
 			children = (
@@ -257,7 +244,6 @@
 			children = (
 				9056547127AACDBE00C4469D /* App */,
 				905DEA4127BA5FB10060EFB0 /* Generated */,
-				905DEA5627BDA4260060EFB0 /* Persistence */,
 				9056547227AACDC900C4469D /* Resources */,
 				9056547327AACDDE00C4469D /* UserStories */,
 			);
@@ -497,8 +483,6 @@
 				90DC453C27B8F1D500AF01E7 /* AppModulesFactory.swift in Sources */,
 				90DC454E27B923ED00AF01E7 /* CharactersListCell.swift in Sources */,
 				9085FBDF27A9CF330042AEE2 /* SceneDelegate.swift in Sources */,
-				905DEA5C27BDA4D30060EFB0 /* TaskForceDataModel.xcdatamodeld in Sources */,
-				905DEA5E27BDA8690060EFB0 /* PersistenceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -860,19 +844,6 @@
 			productName = ImageDownloader;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		905DEA5A27BDA4D30060EFB0 /* TaskForceDataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				905DEA5B27BDA4D30060EFB0 /* TaskForceDataModel.xcdatamodel */,
-			);
-			currentVersion = 905DEA5B27BDA4D30060EFB0 /* TaskForceDataModel.xcdatamodel */;
-			path = TaskForceDataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 9085FB6027A6A4F90042AEE2 /* Project object */;
 }
