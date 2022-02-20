@@ -8,20 +8,40 @@
 import Foundation
 import Combine
 
-public final class PersistentSquadManager: SquadManager {
-    public let squadMembers: AnyPublisher<Set<Character>, Never>
+// TODO alias for squad
 
+public final class PersistentSquadManager: SquadManager {
     private let persistenceController: PersistenceController
     private let squadMembersSubject = CurrentValueSubject<Set<Character>, Never>([])
     private var cancellableBag = Set<AnyCancellable>()
+    private var hasLoadedPersistenCharacters = false
 
     public init(persistenceController: PersistenceController) {
         self.persistenceController = persistenceController
-        squadMembers = squadMembersSubject.eraseToAnyPublisher()
-        loadPersistentCharacters()
+    }
+
+    public func observeSquadMembers() -> AnyPublisher<Set<Character>, Never> {
+        if !hasLoadedPersistenCharacters {
+            hasLoadedPersistenCharacters.toggle()
+            obtainPersistentCharacters()
+                .sink { completion in
+                    guard case let .failure(error) = completion else {
+                        return
+                    }
+                    assertionFailure("Failed to load persistent items due to error: \(error)")
+                } receiveValue: { [weak self] characters in
+                    self?.squadMembersSubject.send(characters)
+                }
+                .store(in: &cancellableBag)
+        }
+
+        return squadMembersSubject.eraseToAnyPublisher()
     }
 
     public func recruit(_ character: Character) {
+        guard !character.isRecruited else  {
+            return
+        }
         character.isRecruited = true
 
         persistenceController
@@ -63,18 +83,10 @@ public final class PersistentSquadManager: SquadManager {
         squadMembersSubject.send(squad)
     }
 
-    private func loadPersistentCharacters() {
+    private func obtainPersistentCharacters() -> AnyPublisher<Set<Character>, Error> {
         persistenceController
             .obtainItems(ofType: Character.self)
             .map(Set<Character>.init)
-            .sink { completion in
-                guard case let .failure(error) = completion else {
-                    return
-                }
-                assertionFailure("Failed to load persistent items due to error: \(error)")
-            } receiveValue: { [weak self] characters in
-                self?.squadMembersSubject.send(characters)
-            }
-            .store(in: &cancellableBag)
+            .eraseToAnyPublisher()
     }
 }

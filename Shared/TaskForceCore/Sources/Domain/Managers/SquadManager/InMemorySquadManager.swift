@@ -9,13 +9,14 @@ import Foundation
 import Combine
 
 public final class InMemorySquadManager: SquadManager {
-    public let squadMembers: AnyPublisher<Set<Character>, Never>
-
     private let squadMembersSubject: CurrentValueSubject<Set<Character>, Never>
 
     public init(squad: Set<Character> = []) {
         squadMembersSubject = .init(squad)
-        squadMembers = squadMembersSubject.eraseToAnyPublisher()
+    }
+
+    public func observeSquadMembers() -> AnyPublisher<Set<Character>, Never> {
+        squadMembersSubject.eraseToAnyPublisher()
     }
 
     public func recruit(_ character: Character) {

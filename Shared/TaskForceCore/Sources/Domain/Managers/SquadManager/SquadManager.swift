@@ -9,8 +9,7 @@ import Foundation
 import Combine
 
 public protocol SquadManager {
-    var squadMembers: AnyPublisher<Set<Character>, Never> { get }
-
+    func observeSquadMembers() -> AnyPublisher<Set<Character>, Never>
     func recruit(_ character: Character)
     func fire(_ character: Character)
 }

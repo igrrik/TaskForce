@@ -20,7 +20,7 @@ public final class LiveCharactersRepository {
 
 extension LiveCharactersRepository: CharactersRepository {
     public func observeSquadMembers() -> AnyPublisher<Set<Character>, Never> {
-        squadManager.squadMembers
+        squadManager.observeSquadMembers()
     }
 
     public func obtainCharacters(pagingParams: PagingParameters) -> AnyPublisher<PageableResponse<Character>, Error> {

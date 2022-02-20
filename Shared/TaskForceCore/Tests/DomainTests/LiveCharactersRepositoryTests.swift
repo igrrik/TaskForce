@@ -146,12 +146,14 @@ final class LiveCharactersRepositoryTests: XCTestCase {
 }
 
 private final class MockSquadManager: SquadManager {
-    lazy var squadMembers: AnyPublisher<Set<Character>, Never> = squadSubject.eraseToAnyPublisher()
-
     let squadSubject: CurrentValueSubject<Set<Character>, Never>
 
     init(squad: Set<Character> = []) {
         squadSubject = .init(squad)
+    }
+
+    func observeSquadMembers() -> AnyPublisher<Set<Character>, Never> {
+        squadSubject.eraseToAnyPublisher()
     }
 
     func recruit(_ character: Character) {
