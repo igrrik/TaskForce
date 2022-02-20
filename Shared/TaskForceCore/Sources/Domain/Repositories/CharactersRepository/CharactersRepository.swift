@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 public protocol CharactersRepository {
-    func observeSquadMembers() -> AnyPublisher<Set<Character>, Never>
+    func observeSquadMembers() -> AnyPublisher<Set<Character>, Error>
     func obtainCharacters(pagingParams: PagingParameters) -> AnyPublisher<PageableResponse<Character>, Error>
     func obtainCharacter(with id: UInt) -> AnyPublisher<Character, Error>
 }

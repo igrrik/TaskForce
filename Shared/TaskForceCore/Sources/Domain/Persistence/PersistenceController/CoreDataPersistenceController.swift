@@ -25,27 +25,32 @@ public final class CoreDataPersistenceController: PersistenceController {
     }
 
     public func obtainItems<T: Persistable>(ofType: T.Type) -> AnyPublisher<[T], Error> {
-        wrapInDeferredSubject { context, subject in
-            do {
-                let fetchRequest = try T.fetchRequest()
-                let items = try context.obtain(fetchRequest)
-                let objects = items.compactMap(T.init(object:))
-                subject.send(objects)
-                subject.send(completion: .finished)
-            } catch {
-                subject.send(completion: .failure(error))
+        Deferred { [persistentContainer] () -> Future<[T], Error> in
+            Future { subscriber in
+                persistentContainer.performBackgroundTask { context in
+                    do {
+                        let fetchRequest = try T.fetchRequest()
+                        let items = try context.obtain(fetchRequest)
+                        let objects = items.compactMap(T.init(object:))
+                        subscriber(.success(objects))
+                    } catch {
+                        subscriber(.failure(error))
+                    }
+                }
             }
         }
+        .receive(on: delegateQueue)
+        .eraseToAnyPublisher()
     }
 
     public func save<T: Persistable>(_ item: T) -> AnyPublisher<Never, Error> {
-        wrapInDeferredSubject { context, subject in
+        wrapInDeferredSubject { [weak self] context, subject in
             do {
                 guard item.makePersistableObject(in: context) != nil else {
                     subject.send(completion: .failure(Failure.failedToCreatePersistableObject))
                     return
                 }
-                try self.save(context: context)
+                try self?.save(context: context)
                 subject.send(completion: .finished)
             } catch {
                 subject.send(completion: .failure(error))
@@ -54,7 +59,7 @@ public final class CoreDataPersistenceController: PersistenceController {
     }
 
     public func delete<T: Persistable>(_ item: T) -> AnyPublisher<Never, Error> {
-        wrapInDeferredSubject { context, subject in
+        wrapInDeferredSubject { [weak self] context, subject in
             do {
                 let fetchRequest = try T.fetchRequest()
                 let predicate = item.identifyingPredicate()
@@ -65,8 +70,8 @@ public final class CoreDataPersistenceController: PersistenceController {
                     subject.send(completion: .failure(Failure.failedToFindObjectWithPredicate(predicate)))
                     return
                 }
-                context.delete(object)
-                try self.save(context: context)
+                try context.delete(object: object, ofPersistableType: T.self)
+                try self?.save(context: context)
                 subject.send(completion: .finished)
             } catch {
                 subject.send(completion: .failure(error))
@@ -93,15 +98,5 @@ public final class CoreDataPersistenceController: PersistenceController {
         }
         .receive(on: delegateQueue)
         .eraseToAnyPublisher()
-    }
-}
-
-private extension Persistable {
-    static func fetchRequest() throws -> NSFetchRequest<PersistableObject> {
-        let entity = PersistableObject.entity()
-        guard let entityName = entity.name else {
-            throw CoreDataPersistenceController.Failure.failedToObtainEntityName(entity)
-        }
-        return NSFetchRequest<PersistableObject>(entityName: entityName)
     }
 }

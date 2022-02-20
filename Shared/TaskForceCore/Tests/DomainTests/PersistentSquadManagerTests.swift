@@ -21,13 +21,6 @@ final class PersistentSquadManagerTests: XCTestCase {
         sut = .init(persistenceController: persistenceController)
     }
 
-    override func tearDownWithError() throws {
-        try super.tearDownWithError()
-        sut = nil
-        persistenceController = nil
-        cancellableBag = nil
-    }
-
     func testThatRecruitCharacterUpdatesSquadMembersAndSavesInPersistenceController() {
         // arrange
         let givenCharacter: Character = .adamWarlock
@@ -139,7 +132,6 @@ final class PersistentSquadManagerTests: XCTestCase {
 }
 
 private final class MockPersistenceController: PersistenceController {
-
     var obtainItemsCallsCount: Int = 0
     var obtainItemsCallsArguments: [Any] = []
     var obtainItemsReturnValue: AnyPublisher<Any, Error>!

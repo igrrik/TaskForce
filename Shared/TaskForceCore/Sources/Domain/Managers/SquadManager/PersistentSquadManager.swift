@@ -20,26 +20,25 @@ public final class PersistentSquadManager: SquadManager {
         self.persistenceController = persistenceController
     }
 
-    public func observeSquadMembers() -> AnyPublisher<Set<Character>, Never> {
-        if !hasLoadedPersistenCharacters {
-            hasLoadedPersistenCharacters.toggle()
-            obtainPersistentCharacters()
-                .sink { completion in
-                    guard case let .failure(error) = completion else {
-                        return
-                    }
-                    assertionFailure("Failed to load persistent items due to error: \(error)")
-                } receiveValue: { [weak self] characters in
-                    self?.squadMembersSubject.send(characters)
-                }
-                .store(in: &cancellableBag)
+    public func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
+        guard !hasLoadedPersistenCharacters else {
+            return squadMembersSubject.setFailureType(to: Error.self).eraseToAnyPublisher()
         }
+        hasLoadedPersistenCharacters.toggle()
 
-        return squadMembersSubject.eraseToAnyPublisher()
+        return persistenceController
+            .obtainItems(ofType: Character.self)
+            .map(Set<Character>.init)
+            .eraseToAnyPublisher()
+            .flatMap { [squadMembersSubject] characters -> AnyPublisher<Set<Character>, Error> in
+                squadMembersSubject.send(characters)
+                return squadMembersSubject.setFailureType(to: Error.self).eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
     }
 
     public func recruit(_ character: Character) {
-        guard !character.isRecruited else  {
+        guard !character.isRecruited else {
             return
         }
         character.isRecruited = true

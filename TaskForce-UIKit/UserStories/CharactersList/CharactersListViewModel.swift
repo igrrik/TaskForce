@@ -104,9 +104,14 @@ final class CharactersListViewModel: ObservableObject, Routable {
                     .sorted(by: { $0.name < $1.name })
                     .map { CharactersListCellModel(character: $0, imageDownloader: imageDownloader) }
             }
-            .sink { [weak self] squad in
+            .sink(receiveCompletion: { completion in
+                guard case let .failure(error) = completion else {
+                    return
+                }
+                assertionFailure("Squad members observation failed: \(error)")
+            }, receiveValue: { [weak self] squad in
                 self?.squad = squad
-            }
+            })
             .store(in: &cancellableBag)
     }
 

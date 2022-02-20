@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 public protocol Persistable {
-    associatedtype PersistableObject: NSManagedObject
+    associatedtype PersistableObject: NSFetchRequestResult
 
     init?(object: PersistableObject)
 
@@ -17,4 +17,16 @@ public protocol Persistable {
     func makePersistableObject(in context: ManagedObjectContext) -> PersistableObject?
 
     func identifyingPredicate() -> NSPredicate
+
+    static func fetchRequest() throws -> NSFetchRequest<PersistableObject>
+}
+
+public extension Persistable where PersistableObject: NSManagedObject {
+    static func fetchRequest() throws -> NSFetchRequest<PersistableObject> {
+        let entity = PersistableObject.entity()
+        guard let entityName = entity.name else {
+            throw CoreDataPersistenceController.Failure.failedToObtainEntityName(entity)
+        }
+        return NSFetchRequest<PersistableObject>(entityName: entityName)
+    }
 }

@@ -15,8 +15,8 @@ public final class InMemorySquadManager: SquadManager {
         squadMembersSubject = .init(squad)
     }
 
-    public func observeSquadMembers() -> AnyPublisher<Set<Character>, Never> {
-        squadMembersSubject.eraseToAnyPublisher()
+    public func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
+        squadMembersSubject.setFailureType(to: Error.self).eraseToAnyPublisher()
     }
 
     public func recruit(_ character: Character) {
