@@ -7,12 +7,13 @@
 
 import Foundation
 import Combine
+import CombineExt
 
 // TODO alias for squad
 
 public final class PersistentSquadManager: SquadManager {
     private let persistenceController: PersistenceController
-    private let squadMembersSubject = CurrentValueSubject<Set<Character>, Never>([])
+    private let squadMembersSubject = ReplaySubject<Set<Character>, Error>(bufferSize: 1)
     private var cancellableBag = Set<AnyCancellable>()
     private var hasLoadedPersistenCharacters = false
 
@@ -21,20 +22,22 @@ public final class PersistentSquadManager: SquadManager {
     }
 
     public func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
-        guard !hasLoadedPersistenCharacters else {
-            return squadMembersSubject.setFailureType(to: Error.self).eraseToAnyPublisher()
-        }
-        hasLoadedPersistenCharacters.toggle()
+        if !hasLoadedPersistenCharacters {
+            hasLoadedPersistenCharacters.toggle()
 
-        return persistenceController
-            .obtainItems(ofType: Character.self)
-            .map(Set<Character>.init)
-            .eraseToAnyPublisher()
-            .flatMap { [squadMembersSubject] characters -> AnyPublisher<Set<Character>, Error> in
-                squadMembersSubject.send(characters)
-                return squadMembersSubject.setFailureType(to: Error.self).eraseToAnyPublisher()
-            }
-            .eraseToAnyPublisher()
+            obtainPersistentCharacters()
+                .sink { [weak self] completion in
+                    guard case let .failure(error) = completion else {
+                        return
+                    }
+                    self?.squadMembersSubject.send(completion: .failure(error))
+                } receiveValue: { [weak self] squad in
+                    self?.squadMembersSubject.send(squad)
+                }
+                .store(in: &cancellableBag)
+        }
+
+        return squadMembersSubject.eraseToAnyPublisher()
     }
 
     public func recruit(_ character: Character) {
@@ -56,9 +59,15 @@ public final class PersistentSquadManager: SquadManager {
             )
             .store(in: &cancellableBag)
 
-        var squad = squadMembersSubject.value
-        squad.insert(character)
-        squadMembersSubject.send(squad)
+        squadMembersSubject
+            .prefix(1)
+            .ignoreFailure()
+            .sink(receiveValue: { [weak self] squad in
+                var squad = squad
+                squad.insert(character)
+                self?.squadMembersSubject.send(squad)
+            })
+            .store(in: &cancellableBag)
     }
 
     public func fire(_ character: Character) {
@@ -80,9 +89,15 @@ public final class PersistentSquadManager: SquadManager {
             )
             .store(in: &cancellableBag)
 
-        var squad = squadMembersSubject.value
-        squad.remove(character)
-        squadMembersSubject.send(squad)
+        squadMembersSubject
+            .prefix(1)
+            .ignoreFailure()
+            .sink(receiveValue: { [weak self] squad in
+                var squad = squad
+                squad.remove(character)
+                self?.squadMembersSubject.send(squad)
+            })
+            .store(in: &cancellableBag)
     }
 
     private func obtainPersistentCharacters() -> AnyPublisher<Set<Character>, Error> {
