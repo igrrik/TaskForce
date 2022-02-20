@@ -13,7 +13,7 @@ public final class InMemorySquadManager: SquadManager {
 
     private let squadMembersSubject: CurrentValueSubject<Set<Character>, Never>
 
-    public init(squad: Set<Character>) {
+    public init(squad: Set<Character> = []) {
         squadMembersSubject = .init(squad)
         squadMembers = squadMembersSubject.eraseToAnyPublisher()
     }

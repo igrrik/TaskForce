@@ -12,13 +12,15 @@ import Combine
 final class LiveCharactersRepositoryTests: XCTestCase {
     private var sut: LiveCharactersRepository!
     private var apiClient: MockAPIClient!
+    private var squadManager: MockSquadManager!
     private var cancellableBag: Set<AnyCancellable>!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         apiClient = .init()
+        squadManager = .init()
         cancellableBag = .init()
-        sut = LiveCharactersRepository(apiClient: apiClient, squadManager: InMemorySquadManager())
+        sut = LiveCharactersRepository(apiClient: apiClient, squadManager: squadManager)
     }
 
     func testThatPageableResponseIsReturnedWhenCharactersAreObtained() {
@@ -56,6 +58,40 @@ final class LiveCharactersRepositoryTests: XCTestCase {
         XCTAssertEqual(expectedResponse, receivedResponse)
     }
 
+    func testThatCharactersRecruitmentStatusIsModifiedDuringObtainment() {
+        // arrange
+        let givenResponse = APIMultipleElementsResponse<Character>(
+            offset: 0,
+            limit: 20,
+            results: [.adamWarlock, .agathaHarkness]
+        )
+        apiClient.addResponse(for: ObtainCharactersRequest.self, result: .success(givenResponse))
+
+        squadManager.squadSubject.send([.adamWarlock])
+
+        let expectedRecruitmentStatuses = [true, false]
+        var receivedCharacters = [Character]()
+
+        // act
+        let expectation = XCTestExpectation(description: "Obtain Characters")
+        sut.obtainCharacters(pagingParams: PagingParameters(limit: 0, offset: 20))
+            .map(\.results)
+            .sink { completion in
+                guard case let .failure(error) = completion else {
+                    return
+                }
+                XCTFail("Unexpected error: \(error)")
+            } receiveValue: { response in
+                receivedCharacters = response
+                expectation.fulfill()
+            }
+            .store(in: &cancellableBag)
+        wait(for: [expectation], timeout: 1.0)
+
+        // assert
+        XCTAssertEqual(receivedCharacters.map(\.isRecruited), expectedRecruitmentStatuses)
+    }
+
     func testThatSingleCharacterIsReturnedWhenCharacterIsObtained() {
         // arrange
         let givenResponse = APISingleElementResponse<Character>(results: [.adamWarlock])
@@ -81,6 +117,53 @@ final class LiveCharactersRepositoryTests: XCTestCase {
 
         // assert
         XCTAssertEqual(expectedResponse, receivedResponse)
+    }
+
+    func testThatObserveSquadMembersPublishesUpdates() {
+        // arrange
+        var receivedSquads: [Set<Character>] = []
+        let expectedSquads: [Set<Character>] = [
+            [],
+            [.adamWarlock],
+            [.adamWarlock, .agathaHarkness],
+            [.agathaHarkness]
+        ]
+        sut.observeSquadMembers()
+            .prefix(expectedSquads.count)
+            .sink { squad in
+                receivedSquads.append(squad)
+            }
+            .store(in: &cancellableBag)
+
+        // act
+        squadManager.squadSubject.send([.adamWarlock])
+        squadManager.squadSubject.send([.adamWarlock, .agathaHarkness])
+        squadManager.squadSubject.send([.agathaHarkness])
+
+        // assert
+        XCTAssertEqual(receivedSquads, expectedSquads)
+    }
+}
+
+private final class MockSquadManager: SquadManager {
+    lazy var squadMembers: AnyPublisher<Set<Character>, Never> = squadSubject.eraseToAnyPublisher()
+
+    let squadSubject: CurrentValueSubject<Set<Character>, Never>
+
+    init(squad: Set<Character> = []) {
+        squadSubject = .init(squad)
+    }
+
+    func recruit(_ character: Character) {
+        var squad = squadSubject.value
+        squad.insert(character)
+        squadSubject.send(squad)
+    }
+
+    func fire(_ character: Character) {
+        var squad = squadSubject.value
+        squad.remove(character)
+        squadSubject.send(squad)
     }
 }
 

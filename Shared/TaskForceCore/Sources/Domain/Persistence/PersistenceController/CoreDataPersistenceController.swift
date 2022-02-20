@@ -10,18 +10,18 @@ import Combine
 import CoreData
 
 public final class CoreDataPersistenceController: PersistenceController {
+    enum Failure: Error {
+        case failedToFindObjectWithPredicate(NSPredicate)
+        case failedToObtainEntityName(NSEntityDescription)
+        case failedToCreatePersistableObject
+    }
+
     private let delegateQueue: DispatchQueue
     private let persistentContainer: PersistentContainer
 
     public init(container: PersistentContainer, delegateQueue: DispatchQueue) {
         self.persistentContainer = container
         self.delegateQueue = delegateQueue
-    }
-
-    enum Failure: Error {
-        case failedToFindObjectWithPredicate(NSPredicate)
-        case failedToObtainEntityName(NSEntityDescription)
-        case failedToCreatePersistableObject
     }
 
     public func obtainItems<T: Persistable>(ofType: T.Type) -> AnyPublisher<[T], Error> {
@@ -41,7 +41,7 @@ public final class CoreDataPersistenceController: PersistenceController {
     public func save<T: Persistable>(_ item: T) -> AnyPublisher<Never, Error> {
         wrapInDeferredSubject { context, subject in
             do {
-                guard let _ = item.makePersistableObject(in: context) else {
+                guard item.makePersistableObject(in: context) != nil else {
                     subject.send(completion: .failure(Failure.failedToCreatePersistableObject))
                     return
                 }
