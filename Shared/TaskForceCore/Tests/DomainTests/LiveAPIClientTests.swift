@@ -155,16 +155,20 @@ private final class StubDataTaskPublisherProducer {
 }
 
 extension Character {
-    static let adamWarlock = Character(
-        id: 1010354,
-        name: "Adam Warlock",
-        info: "Adam Warlock is an artificially created human who was born in a cocoon at a scientific complex called The Beehive.",
-        thumbnail: .init(path: "http://i.annihil.us/u/prod/marvel/i/mg/a/f0/5202887448860", fileExtension: "jpg")
-    )
-    static let agathaHarkness = Character(
-        id: 1012717,
-        name: "Agatha Harkness",
-        info: "",
-        thumbnail: .init(path: "http://i.annihil.us/u/prod/marvel/i/mg/c/a0/4ce5a9bf70e19", fileExtension: "jpg")
-    )
+    static var adamWarlock: Character {
+        .init(
+            id: 1010354,
+            name: "Adam Warlock",
+            info: "Adam Warlock is an artificially created human who was born in a cocoon at a scientific complex called The Beehive.",
+            thumbnail: .init(path: "http://i.annihil.us/u/prod/marvel/i/mg/a/f0/5202887448860", fileExtension: "jpg")
+        )
+    }
+    static var agathaHarkness: Character {
+        .init(
+            id: 1012717,
+            name: "Agatha Harkness",
+            info: "",
+            thumbnail: .init(path: "http://i.annihil.us/u/prod/marvel/i/mg/c/a0/4ce5a9bf70e19", fileExtension: "jpg")
+        )
+    }
 }

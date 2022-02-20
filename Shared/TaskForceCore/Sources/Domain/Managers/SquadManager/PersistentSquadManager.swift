@@ -63,6 +63,9 @@ public final class PersistentSquadManager: SquadManager {
     }
 
     public func fire(_ character: Character) {
+        guard character.isRecruited else {
+            return
+        }
         character.isRecruited = false
 
         persistenceController

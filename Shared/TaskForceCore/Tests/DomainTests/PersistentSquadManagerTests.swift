@@ -12,12 +12,20 @@ import Combine
 final class PersistentSquadManagerTests: XCTestCase {
     private var sut: PersistentSquadManager!
     private var persistenceController: MockPersistenceController!
-    private var cancellableBag = Set<AnyCancellable>()
+    private var cancellableBag: Set<AnyCancellable>!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
+        cancellableBag = .init()
         persistenceController = .init()
         sut = .init(persistenceController: persistenceController)
+    }
+
+    override func tearDownWithError() throws {
+        try super.tearDownWithError()
+        sut = nil
+        persistenceController = nil
+        cancellableBag = nil
     }
 
     func testThatRecruitCharacterUpdatesSquadMembersAndSavesInPersistenceController() {
@@ -31,10 +39,6 @@ final class PersistentSquadManagerTests: XCTestCase {
             .map { $0 as Any }
             .eraseToAnyPublisher()
 
-        sut.observeSquadMembers()
-            .sink(receiveValue: { receivedSquadMembers = $0 })
-            .store(in: &cancellableBag)
-
         persistenceController.saveItemReturnValue = Empty(
             completeImmediately: true,
             outputType: Never.self,
@@ -42,10 +46,15 @@ final class PersistentSquadManagerTests: XCTestCase {
         ).eraseToAnyPublisher()
 
         // act
+        sut.observeSquadMembers()
+            .prefix(2)
+            .sink(receiveValue: { receivedSquadMembers = $0 })
+            .store(in: &cancellableBag)
         sut.recruit(givenCharacter)
 
         // assert
         XCTAssertTrue(givenCharacter.isRecruited)
+        XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
         XCTAssertEqual(persistenceController.saveItemCallsCount, 1)
         XCTAssertEqual(persistenceController.saveItemCallsArguments.first! as! Character, givenCharacter)
         XCTAssertEqual(receivedSquadMembers, expectedSquadMembers)
@@ -62,14 +71,68 @@ final class PersistentSquadManagerTests: XCTestCase {
             .map { $0 as Any }
             .eraseToAnyPublisher()
 
+        // act
         sut.observeSquadMembers()
             .sink(receiveValue: { receivedSquadMembers = $0 })
             .store(in: &cancellableBag)
-
-        // act
         sut.recruit(givenCharacter)
 
         // assert
+        XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
+        XCTAssertEqual(persistenceController.saveItemCallsCount, 0)
+        XCTAssertTrue(receivedSquadMembers.isEmpty)
+    }
+
+    func testThatFiringCharacterUpdatesSquadMembersAndRemovesFromPersistenceController() {
+        // arrange
+        let givenCharacter: Character = .adamWarlock
+        givenCharacter.isRecruited = true
+        let expectedSquadMembers: Set<Character> = [.agathaHarkness]
+        var receivedSquadMembers: Set<Character> = []
+
+        persistenceController.obtainItemsReturnValue = Just([Character.adamWarlock, .agathaHarkness])
+            .setFailureType(to: Error.self)
+            .map { $0 as Any }
+            .eraseToAnyPublisher()
+
+        persistenceController.deleteItemReturnValue = Empty(
+            completeImmediately: true,
+            outputType: Never.self,
+            failureType: Error.self
+        ).eraseToAnyPublisher()
+
+        // act
+        sut.observeSquadMembers()
+            .sink(receiveValue: { receivedSquadMembers = $0 })
+            .store(in: &cancellableBag)
+        sut.fire(givenCharacter)
+
+        // assert
+        XCTAssertFalse(givenCharacter.isRecruited)
+        XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
+        XCTAssertEqual(persistenceController.deleteItemCallsCount, 1)
+        XCTAssertEqual(persistenceController.deleteItemCallsArguments.first! as! Character, givenCharacter)
+        XCTAssertEqual(receivedSquadMembers, expectedSquadMembers)
+    }
+
+    func testThatFiringCharacterDoesNotCauseSideEffectWhenCharacterIsNotRecruited() {
+        // arrange
+        let givenCharacter: Character = .adamWarlock
+        var receivedSquadMembers: Set<Character> = []
+
+        persistenceController.obtainItemsReturnValue = Just([Character]())
+            .setFailureType(to: Error.self)
+            .map { $0 as Any }
+            .eraseToAnyPublisher()
+
+        // act
+        sut.observeSquadMembers()
+            .sink(receiveValue: { receivedSquadMembers = $0 })
+            .store(in: &cancellableBag)
+        sut.fire(givenCharacter)
+
+        // assert
+        XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
         XCTAssertEqual(persistenceController.saveItemCallsCount, 0)
         XCTAssertTrue(receivedSquadMembers.isEmpty)
     }
@@ -82,6 +145,8 @@ private final class MockPersistenceController: PersistenceController {
     var obtainItemsReturnValue: AnyPublisher<Any, Error>!
 
     func obtainItems<T: Persistable>(ofType: T.Type) -> AnyPublisher<[T], Error> {
+        obtainItemsCallsCount += 1
+        obtainItemsCallsArguments.append(ofType)
         return obtainItemsReturnValue.map { $0 as! [T] }.eraseToAnyPublisher()
     }
 
