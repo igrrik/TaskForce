@@ -128,11 +128,19 @@ final class LiveCharactersRepositoryTests: XCTestCase {
             [.adamWarlock, .agathaHarkness],
             [.agathaHarkness]
         ]
+        var receivedError: Error?
+
         sut.observeSquadMembers()
             .prefix(expectedSquads.count)
-            .sink { squad in
-                receivedSquads.append(squad)
-            }
+            .sink(
+                receiveCompletion: { completion in
+                    guard case let .failure(error) = completion else {
+                        return
+                    }
+                    receivedError = error
+                },
+                receiveValue: { receivedSquads.append($0) }
+            )
             .store(in: &cancellableBag)
 
         // act
@@ -141,18 +149,19 @@ final class LiveCharactersRepositoryTests: XCTestCase {
         squadManager.squadSubject.send([.agathaHarkness])
 
         // assert
+        XCTAssertNil(receivedError)
         XCTAssertEqual(receivedSquads, expectedSquads)
     }
 }
 
 private final class MockSquadManager: SquadManager {
-    let squadSubject: CurrentValueSubject<Set<Character>, Never>
+    let squadSubject: CurrentValueSubject<Set<Character>, Error>
 
     init(squad: Set<Character> = []) {
         squadSubject = .init(squad)
     }
 
-    func observeSquadMembers() -> AnyPublisher<Set<Character>, Never> {
+    func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
         squadSubject.eraseToAnyPublisher()
     }
 

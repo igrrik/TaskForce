@@ -21,11 +21,25 @@ final class PersistentSquadManagerTests: XCTestCase {
         sut = .init(persistenceController: persistenceController)
     }
 
+//    func testThatObserveSquadMembersObtainsPersistedDataOnlyOnce() {
+//        // arrange
+//        let expectedSquads: [Squad] = [[], [.adamWarlock], [.adamWarlock, .agathaHarkness]]
+//        var receivedSquads: [Squad] = []
+//
+//        // act
+//        let connectable = sut.observeSquadMembers()
+//
+//        // assert
+//        XCTAssertEqual(receivedSquads, expectedSquads)
+//        XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
+//    }
+
     func testThatRecruitCharacterUpdatesSquadMembersAndSavesInPersistenceController() {
         // arrange
         let givenCharacter: Character = .adamWarlock
         let expectedSquadMembers: Set<Character> = [.adamWarlock]
         var receivedSquadMembers: Set<Character> = []
+        var receivedError: Error?
 
         persistenceController.obtainItemsReturnValue = Just([Character]())
             .setFailureType(to: Error.self)
@@ -41,11 +55,20 @@ final class PersistentSquadManagerTests: XCTestCase {
         // act
         sut.observeSquadMembers()
             .prefix(2)
-            .sink(receiveValue: { receivedSquadMembers = $0 })
+            .sink(
+                receiveCompletion: { completion in
+                    guard case let .failure(error) = completion else {
+                        return
+                    }
+                    receivedError = error
+                },
+                receiveValue: { receivedSquadMembers = $0 }
+            )
             .store(in: &cancellableBag)
         sut.recruit(givenCharacter)
 
         // assert
+        XCTAssertNil(receivedError)
         XCTAssertTrue(givenCharacter.isRecruited)
         XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
         XCTAssertEqual(persistenceController.saveItemCallsCount, 1)
@@ -58,6 +81,7 @@ final class PersistentSquadManagerTests: XCTestCase {
         let givenCharacter: Character = .adamWarlock
         givenCharacter.isRecruited = true
         var receivedSquadMembers: Set<Character> = []
+        var receivedError: Error?
 
         persistenceController.obtainItemsReturnValue = Just([Character]())
             .setFailureType(to: Error.self)
@@ -66,11 +90,20 @@ final class PersistentSquadManagerTests: XCTestCase {
 
         // act
         sut.observeSquadMembers()
-            .sink(receiveValue: { receivedSquadMembers = $0 })
+            .sink(
+                receiveCompletion: { completion in
+                    guard case let .failure(error) = completion else {
+                        return
+                    }
+                    receivedError = error
+                },
+                receiveValue: { receivedSquadMembers = $0 }
+            )
             .store(in: &cancellableBag)
         sut.recruit(givenCharacter)
 
         // assert
+        XCTAssertNil(receivedError)
         XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
         XCTAssertEqual(persistenceController.saveItemCallsCount, 0)
         XCTAssertTrue(receivedSquadMembers.isEmpty)
@@ -82,6 +115,7 @@ final class PersistentSquadManagerTests: XCTestCase {
         givenCharacter.isRecruited = true
         let expectedSquadMembers: Set<Character> = [.agathaHarkness]
         var receivedSquadMembers: Set<Character> = []
+        var receivedError: Error?
 
         persistenceController.obtainItemsReturnValue = Just([Character.adamWarlock, .agathaHarkness])
             .setFailureType(to: Error.self)
@@ -96,11 +130,20 @@ final class PersistentSquadManagerTests: XCTestCase {
 
         // act
         sut.observeSquadMembers()
-            .sink(receiveValue: { receivedSquadMembers = $0 })
+            .sink(
+                receiveCompletion: { completion in
+                    guard case let .failure(error) = completion else {
+                        return
+                    }
+                    receivedError = error
+                },
+                receiveValue: { receivedSquadMembers = $0 }
+            )
             .store(in: &cancellableBag)
         sut.fire(givenCharacter)
 
         // assert
+        XCTAssertNil(receivedError)
         XCTAssertFalse(givenCharacter.isRecruited)
         XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
         XCTAssertEqual(persistenceController.deleteItemCallsCount, 1)
@@ -112,6 +155,7 @@ final class PersistentSquadManagerTests: XCTestCase {
         // arrange
         let givenCharacter: Character = .adamWarlock
         var receivedSquadMembers: Set<Character> = []
+        var receivedError: Error?
 
         persistenceController.obtainItemsReturnValue = Just([Character]())
             .setFailureType(to: Error.self)
@@ -120,11 +164,20 @@ final class PersistentSquadManagerTests: XCTestCase {
 
         // act
         sut.observeSquadMembers()
-            .sink(receiveValue: { receivedSquadMembers = $0 })
+            .sink(
+                receiveCompletion: { completion in
+                    guard case let .failure(error) = completion else {
+                        return
+                    }
+                    receivedError = error
+                },
+                receiveValue: { receivedSquadMembers = $0 }
+            )
             .store(in: &cancellableBag)
         sut.fire(givenCharacter)
 
         // assert
+        XCTAssertNil(receivedError)
         XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
         XCTAssertEqual(persistenceController.saveItemCallsCount, 0)
         XCTAssertTrue(receivedSquadMembers.isEmpty)

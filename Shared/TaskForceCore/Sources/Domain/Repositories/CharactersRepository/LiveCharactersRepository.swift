@@ -29,7 +29,6 @@ extension LiveCharactersRepository: CharactersRepository {
             .map(PageableResponse.init(apiResponse:))
             .zip(observeSquadMembers())
             .map { response, squad in
-                print(squad)
                 let characters = response
                     .results
                     .map { Character.modifyingRecruitmentStatus(character: $0, squad: squad) }

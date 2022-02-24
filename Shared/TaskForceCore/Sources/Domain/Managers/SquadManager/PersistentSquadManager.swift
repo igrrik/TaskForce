@@ -13,7 +13,7 @@ import CombineExt
 
 public final class PersistentSquadManager: SquadManager {
     private let persistenceController: PersistenceController
-    private let squadMembersSubject = ReplaySubject<Set<Character>, Error>(bufferSize: 1)
+    private let squadMembersSubject = ReplaySubject<Squad, Error>(bufferSize: 1)
     private var cancellableBag = Set<AnyCancellable>()
     private var hasLoadedPersistenCharacters = false
 
@@ -22,22 +22,16 @@ public final class PersistentSquadManager: SquadManager {
     }
 
     public func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
-        if !hasLoadedPersistenCharacters {
-            hasLoadedPersistenCharacters.toggle()
-
-            obtainPersistentCharacters()
-                .sink { [weak self] completion in
-                    guard case let .failure(error) = completion else {
-                        return
-                    }
-                    self?.squadMembersSubject.send(completion: .failure(error))
-                } receiveValue: { [weak self] squad in
-                    self?.squadMembersSubject.send(squad)
-                }
-                .store(in: &cancellableBag)
+        guard !hasLoadedPersistenCharacters else {
+            return squadMembersSubject.eraseToAnyPublisher()
         }
-
-        return squadMembersSubject.eraseToAnyPublisher()
+        return Deferred<AnyPublisher<Set<Character>, Error>> { [weak self] in
+            guard let self = self else {
+                return Empty<Squad, Error>(completeImmediately: true).eraseToAnyPublisher()
+            }
+            return self.initiateSubject()
+        }
+        .eraseToAnyPublisher()
     }
 
     public func recruit(_ character: Character) {
@@ -98,6 +92,25 @@ public final class PersistentSquadManager: SquadManager {
                 self?.squadMembersSubject.send(squad)
             })
             .store(in: &cancellableBag)
+    }
+
+    private func initiateSubject() -> AnyPublisher<Set<Character>, Error> {
+        if !hasLoadedPersistenCharacters {
+            hasLoadedPersistenCharacters.toggle()
+
+            obtainPersistentCharacters()
+                .sink { [weak self] completion in
+                    guard case let .failure(error) = completion else {
+                        return
+                    }
+                    self?.squadMembersSubject.send(completion: .failure(error))
+                } receiveValue: { [weak self] squad in
+                    self?.squadMembersSubject.send(squad)
+                }
+                .store(in: &cancellableBag)
+        }
+
+        return squadMembersSubject.eraseToAnyPublisher()
     }
 
     private func obtainPersistentCharacters() -> AnyPublisher<Set<Character>, Error> {
