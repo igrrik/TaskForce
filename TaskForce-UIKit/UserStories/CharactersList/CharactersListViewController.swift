@@ -13,17 +13,20 @@ import ImageDownloader
 final class CharactersListViewController: UIViewController {
     private let viewModel: CharactersListViewModel
     private var cancellableBag = Set<AnyCancellable>()
+    private var selectedItemIndexPath: IndexPath?
+    private var numberOfSections: Int = 1
     private lazy var dataSource = DataSource.create(collectionView: collectionView)
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.color = .white
         return indicator
     }()
-    private lazy var collectionView = UICollectionView(
-        frame: view.bounds,
-        collectionViewLayout: CharactersListSection.makeCompositionalLayout(viewModel: viewModel)
-    )
-    private var selectedItemIndexPath: IndexPath?
+    private lazy var collectionView: UICollectionView = {
+        let layout = CharactersListSection.makeCompositionalLayout(numberOfSections: { [weak self] in
+            self?.numberOfSections ?? 1
+        })
+        return UICollectionView(frame: view.bounds, collectionViewLayout: layout)
+    }()
 
     init(viewModel: CharactersListViewModel) {
         self.viewModel = viewModel
@@ -105,15 +108,17 @@ private extension CharactersListViewController {
             .store(in: &cancellableBag)
 
         viewModel.$squad
-            .filter { !$0.isEmpty }
             .makeSnapshot()
             .sink { [weak self] snapshot in
+                let numberOfItems = snapshot?.items.count ?? 0
+                self?.numberOfSections = numberOfItems > 0 ? 2 : 1
                 self?.applySquadSnaphot(snapshot)
             }
             .store(in: &cancellableBag)
 
         viewModel.$allCharacters
             .makeSnapshot()
+            .compactMap { $0 }
             .sink { [weak self] snapshot in
                 self?.dataSource.apply(snapshot, to: .allCharacters, animatingDifferences: true)
             }
@@ -141,15 +146,21 @@ private extension CharactersListViewController {
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    func applySquadSnaphot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CharactersListCellModel>) {
-        guard collectionView.numberOfSections == 1 else {
-            dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
+    func applySquadSnaphot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CharactersListCellModel>?) {
+        guard let snapshot = snapshot else {
+            var currentSnapshot = dataSource.snapshot()
+            currentSnapshot.deleteSections([.squad])
+            dataSource.apply(currentSnapshot, animatingDifferences: true)
             return
         }
-        var currentSnapshot = dataSource.snapshot()
-        currentSnapshot.insertSections([.squad], beforeSection: .allCharacters)
-        dataSource.apply(currentSnapshot, animatingDifferences: true) { [weak self] in
-            self?.dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
+        if collectionView.numberOfSections > 1 {
+            dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
+        } else {
+            var currentSnapshot = dataSource.snapshot()
+            currentSnapshot.insertSections([.squad], beforeSection: .allCharacters)
+            dataSource.apply(currentSnapshot, animatingDifferences: true) { [weak self] in
+                self?.dataSource.apply(snapshot, to: .squad, animatingDifferences: true)
+            }
         }
     }
 
@@ -212,9 +223,11 @@ private extension DataSource {
 }
 
 private extension CharactersListSection {
-    static func makeCompositionalLayout(viewModel: CharactersListViewModel) -> UICollectionViewCompositionalLayout {
+    static func makeCompositionalLayout(
+        numberOfSections: @escaping () -> Int
+    ) -> UICollectionViewCompositionalLayout {
         let provider: UICollectionViewCompositionalLayoutSectionProvider = { sectionIndex, environment in
-            guard !viewModel.squad.isEmpty else {
+            guard numberOfSections() > 1 else {
                 return makeAllCharactersLayout()
             }
             guard let section = Self(rawValue: sectionIndex) else {
@@ -275,8 +288,11 @@ private extension CharactersListSection {
 }
 
 private extension Publisher where Output == [CharactersListCellModel], Failure == Never {
-    func makeSnapshot() -> AnyPublisher<NSDiffableDataSourceSectionSnapshot<CharactersListCellModel>, Never> {
-        map { models -> NSDiffableDataSourceSectionSnapshot<CharactersListCellModel> in
+    func makeSnapshot() -> AnyPublisher<NSDiffableDataSourceSectionSnapshot<CharactersListCellModel>?, Never> {
+        map { models -> NSDiffableDataSourceSectionSnapshot<CharactersListCellModel>? in
+            guard !models.isEmpty else {
+                return nil
+            }
             var snapshot = NSDiffableDataSourceSectionSnapshot<CharactersListCellModel>()
             snapshot.append(models)
             return snapshot
