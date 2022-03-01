@@ -42,14 +42,13 @@ final class PersistentSquadManagerTests: XCTestCase {
             .prefix(3)
             .sink(onValue: { squad in
                 receivedSquads.append(squad)
-            }, onError: { error in
+            }, onError: { _ in
                 XCTFail()
             })
             .store(in: &cancellableBag)
 
         sut.recruit(.agathaHarkness)
         sut.fire(adam)
-
 
         // assert
         XCTAssertEqual(receivedSquads, expectedSquads)

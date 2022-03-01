@@ -4,6 +4,25 @@
 
 TaskForce is a small app that gives you opportunity to assemble your own squad of Marvel Characters.
 
+## Screenshots
+<table>
+  <tr>
+    <td>Main Screen</td>
+    <td>Character Details</td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/main_screen.png" width=375></td>
+    <td><img src="screenshots/character_details.png" width=375></td>
+  </tr>
+ </table>
+
+## Features
+* Communication with REST API via URLSession
+* Persistence is implemented with Core Data
+* Combine based MVVM architecture
+* Localization
+* Assets generation with SwiftGen
+
 ## Requirements
 
 * Xcode 13+
@@ -34,7 +53,9 @@ This project is written in Swift 5.5 and requires Xcode 13 or newer to build and
 TaskForce is compatible with iOS 14.0+.
 
 ## Things to do/improve
-  
+
+- [ ] Add Persistence Tests
+- [ ] Add ViewModel Tests  
 - [ ] Add UITests
 - [ ] Add SwiftUI version
 - [ ] Remove Kingfisher
