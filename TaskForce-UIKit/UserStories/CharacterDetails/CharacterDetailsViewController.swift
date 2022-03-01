@@ -16,6 +16,7 @@ final class CharacterDetailsViewController: UIViewController {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.text = viewModel.name
+        label.numberOfLines = 2
         label.textColor = .white
         label.font = .systemFont(ofSize: 34, weight: .bold)
         return label
