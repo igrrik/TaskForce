@@ -9,13 +9,13 @@ import Foundation
 import Combine
 
 public final class InMemorySquadManager: SquadManager {
-    private let squadMembersSubject: CurrentValueSubject<Set<Character>, Never>
+    private let squadMembersSubject: CurrentValueSubject<Squad, Never>
 
-    public init(squad: Set<Character> = []) {
+    public init(squad: Squad = []) {
         squadMembersSubject = .init(squad)
     }
 
-    public func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
+    public func observeSquadMembers() -> AnyPublisher<Squad, Error> {
         squadMembersSubject.setFailureType(to: Error.self).eraseToAnyPublisher()
     }
 

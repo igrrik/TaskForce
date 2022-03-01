@@ -19,7 +19,7 @@ public final class LiveCharactersRepository {
 }
 
 extension LiveCharactersRepository: CharactersRepository {
-    public func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
+    public func observeSquadMembers() -> AnyPublisher<Squad, Error> {
         squadManager.observeSquadMembers()
     }
 
@@ -47,7 +47,7 @@ extension LiveCharactersRepository: CharactersRepository {
 }
 
 private extension Character {
-    static func modifyingRecruitmentStatus(character: Character, squad: Set<Character>) -> Character {
+    static func modifyingRecruitmentStatus(character: Character, squad: Squad) -> Character {
         character.isRecruited = squad.contains(character)
         return character
     }

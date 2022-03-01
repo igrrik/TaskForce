@@ -21,7 +21,7 @@ public final class PersistentSquadManager: SquadManager {
         self.persistenceController = persistenceController
     }
 
-    public func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
+    public func observeSquadMembers() -> AnyPublisher<Squad, Error> {
         squadMembersSubject
             .handleEvents(receiveRequest: { [weak self] _ in
                 guard let self = self, !self.hasLoadedPersistentCharacters else {
@@ -96,7 +96,7 @@ public final class PersistentSquadManager: SquadManager {
     private func connectInitialDataObtainmentPublisher() {
         persistenceController
             .obtainItems(ofType: Character.self)
-            .map(Set<Character>.init)
+            .map(Squad.init)
             .sink(onValue: { [weak self] squad in
                 self?.squadMembersSubject.send(squad)
             }, onError: { [weak self] error in

@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 public protocol SquadManager {
-    func observeSquadMembers() -> AnyPublisher<Set<Character>, Error>
+    func observeSquadMembers() -> AnyPublisher<Squad, Error>
     func recruit(_ character: Character)
     func fire(_ character: Character)
 }

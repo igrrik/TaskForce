@@ -121,8 +121,8 @@ final class LiveCharactersRepositoryTests: XCTestCase {
 
     func testThatObserveSquadMembersPublishesUpdates() {
         // arrange
-        var receivedSquads: [Set<Character>] = []
-        let expectedSquads: [Set<Character>] = [
+        var receivedSquads: [Squad] = []
+        let expectedSquads: [Squad] = [
             [],
             [.adamWarlock],
             [.adamWarlock, .agathaHarkness],
@@ -155,13 +155,13 @@ final class LiveCharactersRepositoryTests: XCTestCase {
 }
 
 private final class MockSquadManager: SquadManager {
-    let squadSubject: CurrentValueSubject<Set<Character>, Error>
+    let squadSubject: CurrentValueSubject<Squad, Error>
 
-    init(squad: Set<Character> = []) {
+    init(squad: Squad = []) {
         squadSubject = .init(squad)
     }
 
-    func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
+    func observeSquadMembers() -> AnyPublisher<Squad, Error> {
         squadSubject.eraseToAnyPublisher()
     }
 
