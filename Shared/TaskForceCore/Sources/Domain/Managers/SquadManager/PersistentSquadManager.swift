@@ -9,8 +9,6 @@ import Foundation
 import Combine
 import CombineExt
 
-// TODO alias for squad
-
 public final class PersistentSquadManager: SquadManager {
     private let persistenceController: PersistenceController
     private let squadMembersSubject = ReplaySubject<Squad, Error>(bufferSize: 1)
