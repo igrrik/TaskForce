@@ -223,6 +223,22 @@ private extension DataSource {
 }
 
 private extension CharactersListSection {
+    enum Constants {
+        static let defaultOffset: CGFloat = 16.0
+        static let titleHeight: NSCollectionLayoutDimension = .absolute(41.0)
+        static let squadGroupHeight: NSCollectionLayoutDimension = .absolute(116.0)
+        static let squadGroupWidthMultiplier: CGFloat = 0.225
+        static let squadGroupContentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8)
+        static let squadSectionContentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16)
+        static let allCharactersGroupHeight: NSCollectionLayoutDimension = .absolute(80)
+        static let allCharactersSectionContentInsets = NSDirectionalEdgeInsets(
+            top: 16,
+            leading: 16,
+            bottom: 16,
+            trailing: 16
+        )
+    }
+
     static func makeCompositionalLayout(
         numberOfSections: @escaping () -> Int
     ) -> UICollectionViewCompositionalLayout {
@@ -244,8 +260,8 @@ private extension CharactersListSection {
     }
 
     private static func makeSquadLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        let leadingInset: CGFloat = 16.0
-        let groupWidth = (environment.container.contentSize.width - leadingInset) * 0.225
+        let leadingInset = Constants.defaultOffset
+        let groupWidth = (environment.container.contentSize.width - leadingInset) * Constants.squadGroupWidthMultiplier
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -253,17 +269,20 @@ private extension CharactersListSection {
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(groupWidth), heightDimension: .absolute(116))
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(groupWidth),
+            heightDimension: Constants.squadGroupHeight
+        )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8)
+        group.contentInsets = Constants.squadGroupContentInsets
         let sectionLayout = NSCollectionLayoutSection(group: group)
         sectionLayout.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-        sectionLayout.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: leadingInset, bottom: 0, trailing: 16)
+        sectionLayout.contentInsets = Constants.squadSectionContentInsets
 
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(41) // TODO: replace with value provided by title view
+                heightDimension: Constants.titleHeight
             ),
             elementKind: CharactersListTitleView.kind,
             alignment: .topLeading
@@ -278,11 +297,14 @@ private extension CharactersListSection {
             heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(80))
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: Constants.allCharactersGroupHeight
+        )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         let sectionLayout = NSCollectionLayoutSection(group: group)
-        sectionLayout.interGroupSpacing = 16
-        sectionLayout.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
+        sectionLayout.interGroupSpacing = Constants.defaultOffset
+        sectionLayout.contentInsets = Constants.allCharactersSectionContentInsets
         return sectionLayout
     }
 }
