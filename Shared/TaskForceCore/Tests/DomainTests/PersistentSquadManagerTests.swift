@@ -42,8 +42,8 @@ final class PersistentSquadManagerTests: XCTestCase {
             .prefix(3)
             .sink(onValue: { squad in
                 receivedSquads.append(squad)
-            }, onError: { _ in
-                XCTFail()
+            }, onError: { error in
+                XCTFail("Unexpected error: \(error)")
             })
             .store(in: &cancellableBag)
 
