@@ -15,23 +15,22 @@ public final class PersistentSquadManager: SquadManager {
     private let persistenceController: PersistenceController
     private let squadMembersSubject = ReplaySubject<Squad, Error>(bufferSize: 1)
     private var cancellableBag = Set<AnyCancellable>()
-    private var hasLoadedPersistenCharacters = false
+    private var hasLoadedPersistentCharacters = false
 
     public init(persistenceController: PersistenceController) {
         self.persistenceController = persistenceController
     }
 
     public func observeSquadMembers() -> AnyPublisher<Set<Character>, Error> {
-        guard !hasLoadedPersistenCharacters else {
-            return squadMembersSubject.eraseToAnyPublisher()
-        }
-        return Deferred<AnyPublisher<Set<Character>, Error>> { [weak self] in
-            guard let self = self else {
-                return Empty<Squad, Error>(completeImmediately: true).eraseToAnyPublisher()
-            }
-            return self.initiateSubject()
-        }
-        .eraseToAnyPublisher()
+        squadMembersSubject
+            .handleEvents(receiveRequest: { [weak self] _ in
+                guard let self = self, !self.hasLoadedPersistentCharacters else {
+                    return
+                }
+                self.hasLoadedPersistentCharacters = true
+                self.connectInitialDataObtainmentPublisher()
+            })
+            .eraseToAnyPublisher()
     }
 
     public func recruit(_ character: Character) {
@@ -94,29 +93,15 @@ public final class PersistentSquadManager: SquadManager {
             .store(in: &cancellableBag)
     }
 
-    private func initiateSubject() -> AnyPublisher<Set<Character>, Error> {
-        if !hasLoadedPersistenCharacters {
-            hasLoadedPersistenCharacters.toggle()
-
-            obtainPersistentCharacters()
-                .sink { [weak self] completion in
-                    guard case let .failure(error) = completion else {
-                        return
-                    }
-                    self?.squadMembersSubject.send(completion: .failure(error))
-                } receiveValue: { [weak self] squad in
-                    self?.squadMembersSubject.send(squad)
-                }
-                .store(in: &cancellableBag)
-        }
-
-        return squadMembersSubject.eraseToAnyPublisher()
-    }
-
-    private func obtainPersistentCharacters() -> AnyPublisher<Set<Character>, Error> {
+    private func connectInitialDataObtainmentPublisher() {
         persistenceController
             .obtainItems(ofType: Character.self)
             .map(Set<Character>.init)
-            .eraseToAnyPublisher()
+            .sink(onValue: { [weak self] squad in
+                self?.squadMembersSubject.send(squad)
+            }, onError: { [weak self] error in
+                self?.squadMembersSubject.send(completion: .failure(error))
+            })
+            .store(in: &cancellableBag)
     }
 }
