@@ -31,11 +31,6 @@ final class LiveURLRequestBuilderTests: XCTestCase {
         )
     }
 
-    override func tearDownWithError() throws {
-        sut = nil
-        try super.tearDownWithError()
-    }
-
     func testThatURLRequestIsCreated() {
         // arrange
         hasher.hashFunction = { $0.uppercased() }

@@ -21,24 +21,48 @@ final class PersistentSquadManagerTests: XCTestCase {
         sut = .init(persistenceController: persistenceController)
     }
 
-//    func testThatObserveSquadMembersObtainsPersistedDataOnlyOnce() {
-//        // arrange
-//        let expectedSquads: [Squad] = [[], [.adamWarlock], [.adamWarlock, .agathaHarkness]]
-//        var receivedSquads: [Squad] = []
-//
-//        // act
-//        let connectable = sut.observeSquadMembers()
-//
-//        // assert
-//        XCTAssertEqual(receivedSquads, expectedSquads)
-//        XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
-//    }
+    func testThatObserveSquadMembersIsUpdatedWhenCharacterIsRecruitedOrFired() {
+        // arrange
+        let adam = Character.adamWarlock
+        adam.isRecruited = true
+
+        let expectedSquads: [Squad] = [[adam], [adam, .agathaHarkness], [.agathaHarkness]]
+        var receivedSquads: [Squad] = []
+        persistenceController.saveItemReturnValue = Empty<Never, Error>(completeImmediately: true)
+            .eraseToAnyPublisher()
+        persistenceController.deleteItemReturnValue = Empty<Never, Error>(completeImmediately: true)
+            .eraseToAnyPublisher()
+        persistenceController.obtainItemsReturnValue = Just([adam])
+            .setFailureType(to: Error.self)
+            .map { $0 as Any }
+            .eraseToAnyPublisher()
+
+        // act
+        sut.observeSquadMembers()
+            .prefix(3)
+            .sink(onValue: { squad in
+                receivedSquads.append(squad)
+            }, onError: { error in
+                XCTFail()
+            })
+            .store(in: &cancellableBag)
+
+        sut.recruit(.agathaHarkness)
+        sut.fire(adam)
+
+
+        // assert
+        XCTAssertEqual(receivedSquads, expectedSquads)
+        XCTAssertEqual(persistenceController.obtainItemsCallsCount, 1)
+        XCTAssertEqual(persistenceController.saveItemCallsCount, 1)
+        XCTAssertEqual(persistenceController.deleteItemCallsCount, 1)
+    }
 
     func testThatRecruitCharacterUpdatesSquadMembersAndSavesInPersistenceController() {
         // arrange
         let givenCharacter: Character = .adamWarlock
-        let expectedSquadMembers: Set<Character> = [.adamWarlock]
-        var receivedSquadMembers: Set<Character> = []
+        let expectedSquadMembers: Squad = [.adamWarlock]
+        var receivedSquadMembers: Squad = []
         var receivedError: Error?
 
         persistenceController.obtainItemsReturnValue = Just([Character]())
@@ -80,7 +104,7 @@ final class PersistentSquadManagerTests: XCTestCase {
         // arrange
         let givenCharacter: Character = .adamWarlock
         givenCharacter.isRecruited = true
-        var receivedSquadMembers: Set<Character> = []
+        var receivedSquadMembers: Squad = []
         var receivedError: Error?
 
         persistenceController.obtainItemsReturnValue = Just([Character]())
@@ -113,8 +137,8 @@ final class PersistentSquadManagerTests: XCTestCase {
         // arrange
         let givenCharacter: Character = .adamWarlock
         givenCharacter.isRecruited = true
-        let expectedSquadMembers: Set<Character> = [.agathaHarkness]
-        var receivedSquadMembers: Set<Character> = []
+        let expectedSquadMembers: Squad = [.agathaHarkness]
+        var receivedSquadMembers: Squad = []
         var receivedError: Error?
 
         persistenceController.obtainItemsReturnValue = Just([Character.adamWarlock, .agathaHarkness])
@@ -154,7 +178,7 @@ final class PersistentSquadManagerTests: XCTestCase {
     func testThatFiringCharacterDoesNotCauseSideEffectWhenCharacterIsNotRecruited() {
         // arrange
         let givenCharacter: Character = .adamWarlock
-        var receivedSquadMembers: Set<Character> = []
+        var receivedSquadMembers: Squad = []
         var receivedError: Error?
 
         persistenceController.obtainItemsReturnValue = Just([Character]())
