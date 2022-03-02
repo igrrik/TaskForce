@@ -59,7 +59,6 @@ TaskForce is compatible with iOS 14.0+.
 - [ ] Add UITests
 - [ ] Reachability
 - [ ] Add SwiftUI version
-- [ ] Remove Kingfisher
 
 ## License
 

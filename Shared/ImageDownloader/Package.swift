@@ -26,10 +26,6 @@ let package = Package(
         .target(
             name: "ImageDownloader",
             dependencies: ["Kingfisher"]
-        ),
-        .testTarget(
-            name: "ImageDownloaderTests",
-            dependencies: ["ImageDownloader"]
         )
     ]
 )
