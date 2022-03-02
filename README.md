@@ -46,6 +46,31 @@ It's important to add "*" as an Authorized Referrer in the Account section.
 * Wait till SPM dependencies are downloaded
 * Run!
 
+## Project overview
+
+### Structure
+* Project is structured in a way to give a glance on how modular approach can be achieved. Although it is pretty common to start project as a monolith, modularizing an app from the beginning is a good practice in long term, especially since Apple provided this opportunity with local Swift Packages. Modular architecture is usually applied when a project starts to grow, to reduce build time and simplify project support especially when there are several teams working on it.
+* Shared folder is intended to be the place for all code that can be shared between different targets or apps (i.e. UIKit app and SwiftUI app). It includes two Swift Packages: `ImageDownloader` and `TaskForceCore`.
+* `ImageDownloader` is a thin wrapper around `Kingfisher` library. This wrapper is created to simplify Unit-testing, and also it gives us opportunity to replace `Kingfisher` with any other solution painlessly, if we need that, and there is no need to modify actual app code in this case.
+* `TaskForceCore` is a module that contains all the business logic that is not related to specific target or app implementation.
+
+### Acrhitecture
+* `MVVM` is used as a base architecture for presentation layer, because it gives better control of UI-state consistency than `MVP` or `MVC`, while keeping the entry level low. Also it works well with both `UIKit` and `SwiftUI`.
+* Routing is inspired by `Coordinator` pattern and is implemented in `AppFlowController`. The difference between common `Coordinator` implementation and the one used in this project, is that `Coordinator` is not a simple class, but a subclass of a `UIViewController`/`UINavigationController`/`UITabViewController`. This is done because common `Coordinator` implementations usually need to either manually handle their life-cycle, which is an error-prone process, or have a lot of custom logic for doing it under the hood, also they either use `UIKit` objects to actually perform navigation or create a bunch of classes to abstract this work. Current approach was chosen because it keeps the navigation logic simple, by leveraging `UIKit` APIs of container view controllers and presentation methods (i.e. `show(_:sender:)`).
+
+### Presentation layer
+* Screen logic is located in `TaskForce/UserStories` folder.
+* `CharactersList` supports infinite scrolling and consists of two sections:
+  * Your squad, which shows all the characters that you've recruited. Squad persists between launches.
+  * All Characters.
+* `CharacterDetails` shows you a brief informatio about the character and gives you opportunity to recruit of fire a character.
+* These modules are created in `AppModulesFactory`, that is owned by `AppFlowController`.
+* `AppModulesFactory` uses `DependenciesRegistry` class to obtain dependencies like services, repositories, etc.
+
+### Tooling
+* `Swiftlint` is used to lint code files and maintain consistency of code style.
+* `SwiftGen` is used to generate enums for compile-time safety of assets and localizable strings.
+
 ## Compatibility
 
 This project is written in Swift 5.5 and requires Xcode 13 or newer to build and run.
