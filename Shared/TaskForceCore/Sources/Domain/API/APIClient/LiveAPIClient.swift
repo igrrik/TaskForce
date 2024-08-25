@@ -48,7 +48,7 @@ public final class LiveAPIClient: APIClient {
     }
 
     public func execute<T: APIRequest>(request: T) -> AnyPublisher<T.Response, Error> {
-        return urlRequestBuilder
+        urlRequestBuilder
             .makeURLRequestPublisher(from: request)
             .makeDataTaskPublisher(dataTaskPublisherProducer)
             .map(\.data)

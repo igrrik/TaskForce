@@ -16,7 +16,7 @@ public final class LiveURLRequestBuilder: URLRequestBuilder {
     private let headers: [String: String] = ["Accept": "application/json"]
     private let randomStringProvider: () -> String
     private let hasher: APIHasher
-    private let timeoutInterval: TimeInterval = 10.0
+    private let timeoutInterval: TimeInterval = 120
     private let cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 
     public init(

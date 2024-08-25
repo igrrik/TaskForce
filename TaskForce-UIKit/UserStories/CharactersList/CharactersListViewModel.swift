@@ -30,17 +30,12 @@ final class CharactersListViewModel: ObservableObject, Routable {
     private var cancellableBag = Set<AnyCancellable>()
     private var characters: [UInt: Character] = .init()
     private var isLoadingNextPage: Bool = false
-    private var squadCancellable: AnyCancellable?
 
     init(charactersRepository: CharactersRepository, imageDownloader: ImageDownloader) {
         self.charactersRepository = charactersRepository
         self.imageDownloader = imageDownloader
         self.routingAction = routingSubject.eraseToAnyPublisher()
         self.error = errorSubject.eraseToAnyPublisher()
-    }
-
-    deinit {
-        squadCancellable?.cancel()
     }
 
     func obtainInitialData() {

@@ -8,10 +8,10 @@
 import Foundation
 
 public struct PagingParameters {
-    @Clamping(1...100) var limit: UInt = 20
+    @Clamping(1...100) var limit: UInt = 10
     var offset: UInt
 
-    public init(limit: UInt = 20, offset: UInt = 0) {
+    public init(limit: UInt = 10, offset: UInt = 0) {
         self.limit = limit
         self.offset = offset
     }
