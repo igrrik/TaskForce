@@ -17,7 +17,7 @@ let package = Package(
         .package(
             name: "CombineExt",
             url: "https://github.com/CombineCommunity/CombineExt.git",
-            .upToNextMajor(from: "1.5.1")
+            .upToNextMajor(from: "1.8.1")
         )
     ],
     targets: [

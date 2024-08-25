@@ -289,6 +289,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		905DEA4227BA60F00060EFB0 /* Swiftgen */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -307,12 +308,14 @@
 		};
 		905DEA5527BC52650060EFB0 /* Credentials File Check */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"",
 			);
 			name = "Credentials File Check";
 			outputFileListPaths = (
@@ -325,6 +328,7 @@
 		};
 		90DC455527B9B39E00AF01E7 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
